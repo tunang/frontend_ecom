@@ -43,9 +43,9 @@ apiBase.interceptors.response.use(
         case 401:
           // Unauthorized - Token hết hạn hoặc không hợp lệ
           localStorage.removeItem("accessToken");
-          localStorage.removeItem("user");
+          localStorage.removeItem("refreshToken");
           // Có thể redirect về trang login
-          window.location.href = "/login";
+          // window.location.href = "/login";
           break;
           
         case 403:
@@ -118,8 +118,8 @@ apiFormData.interceptors.response.use(
       switch (status) {
         case 401:
           localStorage.removeItem("accessToken");
-          localStorage.removeItem("user");
-          window.location.href = "/login";
+          localStorage.removeItem("refreshToken");
+          // window.location.href = "/login";
           break;
           
         case 403:
