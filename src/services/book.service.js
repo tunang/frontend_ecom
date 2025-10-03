@@ -39,6 +39,26 @@ const BookService = {
         throw error;
       }
     },
+
+    getBookBySlug: async (slug) => {
+      try {
+        const response = await apiBase.get(`/user/books/${slug}`);
+        return response;
+      } catch (error) {
+        console.error("Lỗi khi lấy chi tiết sách:", error);
+        throw error;
+      }
+    },
+
+    getNestedCategories: async () => {
+      try {
+        const response = await apiBase.get("/user/categories/get_nested_category");
+        return response;
+      } catch (error) {
+        console.error("Lỗi khi lấy danh mục nested:", error);
+        throw error;
+      }
+    },
   },
 };
 

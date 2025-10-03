@@ -7,6 +7,9 @@ import VerifyMailPage from "../pages/Auth/VerifyMail";
 import ForgotPasswordPage from "../pages/Auth/ForgotPassword";
 import ResetPasswordPage from "../pages/Auth/ResetPassword";
 import BooksPage from "../pages/Books";
+import BookDetail from "../pages/BookDetail";
+import Cart from "../pages/Cart";
+import Address from "../pages/Address";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +43,18 @@ const router = createBrowserRouter([
       {
         path: "/books",
         element: <BooksPage />,
+      },
+      {
+        path: "/books/:slug",
+        element: <BookDetail />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+      },
+      {
+        path: "/addresses",
+        element: <Address />,
       },
     ],
   },

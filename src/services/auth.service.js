@@ -25,6 +25,16 @@ const AuthService = {
     const response = await api.post("/reset", data);
     return response;
   },
+
+  logout: async () => {
+    const response = await api.delete("/logout");
+    return response;
+  },
+  
+  getCurrentUser: async () => {
+    const response = await api.get("/user/me");
+    return response;
+  },
 };
 
 export default AuthService;
