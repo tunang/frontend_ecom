@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import AuthService from "../services/auth.service";
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   user: null,
   isLoading: false,
   message: null,
@@ -70,18 +70,56 @@ export const useAuthStore = create((set) => ({
     }
   },
   
-  logout: () => {
-    // Chỉ xóa tokens
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  logout: async () => {
+    try {
+      const response = await AuthService.logout();
+      console.log("Logout response:", response);
+      // Chỉ xóa tokens
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      
+      set({
+        user: null,
+        message: null,
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
     
-    set({
-      user: null,
-      message: null,
-    });
   },
   
   clearErrors: () => {
     set({ message: null });
+  },
+  
+  // Khởi tạo user từ localStorage hoặc API
+  initUser: async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    
+    // Nếu không có token, không làm gì cả
+    if (!accessToken) {
+      set({ user: null, isLoading: false });
+      return;
+    }
+    
+    // Nếu có token, fetch user info từ API
+    set({ isLoading: true });
+    try {
+      const response = await AuthService.getCurrentUser();
+      
+      set({
+        user: response.data,
+        isLoading: false,
+      });
+    } catch (error) {
+      // Nếu token không hợp lệ, xóa token và reset state
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      
+      set({
+        user: null,
+        isLoading: false,
+      });
+    }
   },
 }));

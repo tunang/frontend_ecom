@@ -32,18 +32,24 @@ const BooksPage = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter states
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("query") || "");
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "");
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("query") || ""
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || ""
+  );
   const [minPrice, setMinPrice] = useState(searchParams.get("min_price") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("max_price") || "");
   const [sortBy, setSortBy] = useState(searchParams.get("sort_by") || "");
-  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get("page")) || 1);
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get("page")) || 1
+  );
   const [perPage] = useState(12);
 
   // Categories list (có thể fetch từ API)
   const categories = [
     "Fiction",
-    "Non-Fiction", 
+    "Non-Fiction",
     "Science",
     "History",
     "Biography",
@@ -92,20 +98,33 @@ const BooksPage = () => {
     };
 
     fetchBooks();
-  }, [currentPage, perPage, searchQuery, selectedCategory, minPrice, maxPrice, sortBy]);
+  }, [
+    currentPage,
+    perPage,
+    searchQuery,
+    selectedCategory,
+    minPrice,
+    maxPrice,
+    sortBy,
+  ]);
 
   // Update URL params
+  // Sync state với URL params khi searchParams thay đổi (từ navigation bên ngoài)
   useEffect(() => {
-    const params = {};
-    if (searchQuery) params.query = searchQuery;
-    if (selectedCategory) params.category = selectedCategory;
-    if (minPrice) params.min_price = minPrice;
-    if (maxPrice) params.max_price = maxPrice;
-    if (sortBy) params.sort_by = sortBy;
-    if (currentPage > 1) params.page = currentPage;
+    const query = searchParams.get("query") || "";
+    const category = searchParams.get("category") || "";
+    const min = searchParams.get("min_price") || "";
+    const max = searchParams.get("max_price") || "";
+    const sort = searchParams.get("sort_by") || "";
+    const page = parseInt(searchParams.get("page")) || 1;
 
-    setSearchParams(params);
-  }, [searchQuery, selectedCategory, minPrice, maxPrice, sortBy, currentPage, setSearchParams]);
+    setSearchQuery(query);
+    setSelectedCategory(category);
+    setMinPrice(min);
+    setMaxPrice(max);
+    setSortBy(sort);
+    setCurrentPage(page);
+  }, [searchParams]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -121,14 +140,14 @@ const BooksPage = () => {
     setCurrentPage(1);
   };
 
-  const hasActiveFilters = searchQuery || selectedCategory || minPrice || maxPrice || sortBy;
+  const hasActiveFilters =
+    searchQuery || selectedCategory || minPrice || maxPrice || sortBy;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mb-6">
+        {/* <form onSubmit={handleSearch} className="md:hiddenmb-6">
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -145,17 +164,17 @@ const BooksPage = () => {
               className="bg-amber-600 hover:bg-amber-700 text-white px-6"
             >
               Tìm kiếm
-            </Button>
+            </Button> */}
             <Button
               type="button"
               variant="outline"
-              className="md:hidden"
+              className="md:hidden my-4"
               onClick={() => setShowMobileFilters(!showMobileFilters)}
             >
               <Filter className="w-5 h-5" />
             </Button>
-          </div>
-        </form>
+          {/* </div>
+        </form> */}
 
         <div className="flex gap-6">
           {/* Sidebar Filters */}
@@ -316,7 +335,9 @@ const BooksPage = () => {
               </div>
             ) : books.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-gray-500 text-lg">Không tìm thấy sản phẩm nào</p>
+                <p className="text-gray-500 text-lg">
+                  Không tìm thấy sản phẩm nào
+                </p>
                 {hasActiveFilters && (
                   <Button
                     onClick={handleClearFilters}
@@ -340,7 +361,13 @@ const BooksPage = () => {
                         <Link to={`/books/${book.slug || book.id}`}>
                           <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                             <img
-                              src={`${import.meta.env.VITE_API_IMAGE_URL}${book.cover_image_url}`}
+                              src={`${import.meta.env.VITE_API_IMAGE_URL}${
+                                book.cover_image_url
+                              }`}
+                              onError={(e) => {
+                                e.target.src =
+                                  "https://via.placeholder.com/150";
+                              }}
                               alt={book.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
@@ -359,14 +386,20 @@ const BooksPage = () => {
                           </Link>
                           {book.authors && book.authors.length > 0 && (
                             <p className="text-sm text-gray-600 line-clamp-1">
-                              {book.authors.map((author) => author.name).join(", ")}
+                              {book.authors
+                                .map((author) => author.name)
+                                .join(", ")}
                             </p>
                           )}
                           <div className="flex items-center gap-2">
                             {book.discount_percentage > 0 ? (
                               <>
                                 <span className="text-lg font-bold text-amber-600">
-                                  ${(book.price * (1 - book.discount_percentage / 100)).toFixed(2)}
+                                  $
+                                  {(
+                                    book.price *
+                                    (1 - book.discount_percentage / 100)
+                                  ).toFixed(2)}
                                 </span>
                                 <span className="text-sm text-gray-400 line-through">
                                   ${parseFloat(book.price).toFixed(2)}
@@ -380,7 +413,7 @@ const BooksPage = () => {
                           </div>
                           <button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                             <ShoppingCartIcon className="w-4 h-4" />
-                            Thêm vào giỏ
+                            Add
                           </button>
                         </div>
                       </CardContent>
@@ -402,7 +435,9 @@ const BooksPage = () => {
                         {Math.min(currentPage * perPage, totalItems)}
                       </span>{" "}
                       trong tổng số{" "}
-                      <span className="font-semibold text-gray-900">{totalItems}</span>{" "}
+                      <span className="font-semibold text-gray-900">
+                        {totalItems}
+                      </span>{" "}
                       sản phẩm
                     </div>
 
@@ -412,7 +447,9 @@ const BooksPage = () => {
                         <PaginationContent>
                           <PaginationItem>
                             <PaginationPrevious
-                              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                              onClick={() =>
+                                setCurrentPage((p) => Math.max(1, p - 1))
+                              }
                               className={
                                 currentPage === 1
                                   ? "pointer-events-none opacity-50"
@@ -428,7 +465,8 @@ const BooksPage = () => {
                             if (
                               page === 1 ||
                               page === totalPages ||
-                              (page >= currentPage - 1 && page <= currentPage + 1)
+                              (page >= currentPage - 1 &&
+                                page <= currentPage + 1)
                             ) {
                               return (
                                 <PaginationItem key={page}>
@@ -457,7 +495,9 @@ const BooksPage = () => {
                           <PaginationItem>
                             <PaginationNext
                               onClick={() =>
-                                setCurrentPage((p) => Math.min(totalPages, p + 1))
+                                setCurrentPage((p) =>
+                                  Math.min(totalPages, p + 1)
+                                )
                               }
                               className={
                                 currentPage === totalPages
@@ -481,4 +521,3 @@ const BooksPage = () => {
 };
 
 export default BooksPage;
-
