@@ -1,6 +1,5 @@
 import { apiBase as api } from "./api";
 
-
 const AddressService = {
   // Lấy danh sách địa chỉ
   getAddresses: async () => {
@@ -8,18 +7,7 @@ const AddressService = {
       const response = await api.get("/user/addresses");
       return response;
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách địa chỉ:", error);
-      throw error;
-    }
-  },
-
-  // Lấy chi tiết một địa chỉ
-  getAddressById: async (id) => {
-    try {
-      const response = await api.get(`/user/addresses/${id}`);
-      return response;
-    } catch (error) {
-      console.error("Lỗi khi lấy địa chỉ:", error);
+      console.error("Error fetching addresses:", error);
       throw error;
     }
   },
@@ -30,7 +18,7 @@ const AddressService = {
       const response = await api.post("/user/addresses", data);
       return response;
     } catch (error) {
-      console.error("Lỗi khi tạo địa chỉ:", error);
+      console.error("Error creating address:", error);
       throw error;
     }
   },
@@ -41,7 +29,7 @@ const AddressService = {
       const response = await api.put(`/user/addresses/${id}`, data);
       return response;
     } catch (error) {
-      console.error("Lỗi khi cập nhật địa chỉ:", error);
+      console.error("Error updating address:", error);
       throw error;
     }
   },
@@ -52,18 +40,7 @@ const AddressService = {
       const response = await api.delete(`/user/addresses/${id}`);
       return response;
     } catch (error) {
-      console.error("Lỗi khi xóa địa chỉ:", error);
-      throw error;
-    }
-  },
-
-  // Đặt địa chỉ mặc định
-  setDefaultAddress: async (id) => {
-    try {
-      const response = await api.patch(`/user/addresses/${id}/set_default`);
-      return response;
-    } catch (error) {
-      console.error("Lỗi khi đặt địa chỉ mặc định:", error);
+      console.error("Error deleting address:", error);
       throw error;
     }
   },
