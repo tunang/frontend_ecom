@@ -61,9 +61,9 @@ const Address = () => {
       await AddressService.deleteAddress(id);
       setAddresses((prev) => prev.filter((addr) => addr.id !== id));
       setDeletePopoverOpen(null);
-      toast.success("Đã xóa địa chỉ");
+      toast.success("Delete address successfully");
     } catch (error) {
-      toast.error("Không thể xóa địa chỉ");
+      toast.error("Failed to delete address");
     } finally {
       setDeletingId(null);
     }
@@ -74,9 +74,9 @@ const Address = () => {
       await AddressService.setDefaultAddress(id);
       // Refresh addresses to get updated default status
       fetchAddresses();
-      toast.success("Đã đặt làm địa chỉ mặc định");
+      toast.success("Set default address successfully");
     } catch (error) {
-      toast.error("Không thể đặt địa chỉ mặc định");
+      toast.error("Failed to set default address");
     }
   };
 
@@ -91,7 +91,7 @@ const Address = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-amber-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Đang tải...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -103,9 +103,9 @@ const Address = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Địa chỉ của tôi</h1>
+            <h1 className="text-3xl font-bold text-gray-900">My address</h1>
             <p className="text-gray-600 mt-1">
-              Quản lý địa chỉ giao hàng của bạn
+              Manage your shipping address
             </p>
           </div>
           <Button
@@ -113,7 +113,7 @@ const Address = () => {
             className="bg-amber-600 hover:bg-amber-700"
           >
             <Plus className="h-5 w-5 mr-2" />
-            Thêm địa chỉ mới
+            Add new address
           </Button>
         </div>
 
@@ -123,17 +123,17 @@ const Address = () => {
             <CardContent className="flex flex-col items-center justify-center py-16">
               <MapPin className="h-24 w-24 text-gray-300 mb-4" />
               <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-                Chưa có địa chỉ nào
+                No address yet
               </h2>
               <p className="text-gray-500 mb-6">
-                Thêm địa chỉ giao hàng để mua sắm dễ dàng hơn
+                Add shipping address to make shopping easier
               </p>
               <Button
                 onClick={handleAddNew}
                 className="bg-amber-600 hover:bg-amber-700"
               >
                 <Plus className="h-5 w-5 mr-2" />
-                Thêm địa chỉ đầu tiên
+                Add first address
               </Button>
             </CardContent>
           </Card>
@@ -151,7 +151,7 @@ const Address = () => {
       {address.is_default && (
         <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full">
           <CheckCircle className="h-4 w-4" />
-          <span className="font-semibold text-sm">Địa chỉ mặc định</span>
+            <span className="font-semibold text-sm">Default address</span>
         </div>
       )}
 
@@ -200,10 +200,10 @@ const Address = () => {
             variant="outline"
             onClick={() => handleSetDefault(address.id)}
             className="flex-1 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300"
-            title="Đặt làm địa chỉ mặc định"
+            title="Set as default address"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
-            Đặt mặc định
+            Set as default
           </Button>
         )} */}
         
@@ -212,7 +212,7 @@ const Address = () => {
           variant="outline"
           onClick={() => handleEdit(address)}
           className="hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300"
-          title="Chỉnh sửa địa chỉ"
+          title="Edit address"
         >
           <Edit className="h-4 w-4" />
         </Button>
@@ -229,7 +229,7 @@ const Address = () => {
               size="sm"
               variant="outline"
               className="text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300"
-              title="Xóa địa chỉ"
+              title="Delete address"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -242,7 +242,7 @@ const Address = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">
-                    Xác nhận xóa địa chỉ
+                    Confirm delete address
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
                     Bạn có chắc muốn xóa địa chỉ này? Hành động này không thể hoàn tác.
@@ -257,7 +257,7 @@ const Address = () => {
                   className="flex-1"
                   disabled={deletingId === address.id}
                 >
-                  Hủy
+                  Cancel
                 </Button>
                 <Button
                   size="sm"
@@ -268,10 +268,10 @@ const Address = () => {
                   {deletingId === address.id ? (
                     <>
                       <Loader2 className="animate-spin h-4 w-4 mr-1" />
-                      Đang xóa...
+                      Deleting...
                     </>
                   ) : (
-                    "Xóa"
+                    "Delete"
                   )}
                 </Button>
               </div>

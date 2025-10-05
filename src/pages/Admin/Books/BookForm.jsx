@@ -184,17 +184,17 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       if (book) {
         console.log(submitData);
         await BookService.admin.updateBook(book.id, submitData);
-        toast.success("Cập nhật sách thành công");
+        toast.success("Update book successfully");
       } else {
         await BookService.admin.createBook(submitData);
-        toast.success("Thêm sách thành công");
+        toast.success("Add book successfully");
       }
       onSuccess();
     } catch (error) {
       console.error("Error saving book:", error);
       const errorMessage =
         error.response?.data?.errors?.[0] ||
-        (book ? "Không thể cập nhật sách" : "Không thể thêm sách");
+        (book ? "Failed to update book" : "Failed to add book");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -214,7 +214,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-blue-900">
-            {book ? "Chỉnh sửa sách" : "Thêm sách mới"}
+            {book ? "Edit book" : "Add book"}
           </DialogTitle>
         </DialogHeader>
 
@@ -223,7 +223,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tên sách <span className="text-red-500">*</span>
+                Title <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -232,13 +232,13 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nhập tên sách"
+                placeholder="Enter title"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Giá bán <span className="text-red-500">*</span>
+                Price <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -256,7 +256,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mô tả
+              Description
             </label>
             <textarea
               name="description"
@@ -264,7 +264,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
               onChange={handleChange}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              placeholder="Mô tả về sách..."
+              placeholder="Enter description"
             />
           </div>
 
@@ -272,7 +272,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Số lượng tồn kho
+                Stock quantity
               </label>
               <input
                 type="number"
@@ -287,7 +287,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Giá nhập
+                Cost price
               </label>
               <input
                 type="number"
@@ -303,7 +303,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                % Giảm giá
+                  Discount percentage
               </label>
               <input
                 type="number"
@@ -321,7 +321,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Số lượng đã bán
+                Sold count
               </label>
               <input
                 type="number"
@@ -351,7 +351,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Authors Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tác giả
+              Author
             </label>
             <Popover>
               <PopoverTrigger asChild>
@@ -362,8 +362,8 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {formData.author_ids.length > 0 
-                    ? `${formData.author_ids.length} tác giả đã chọn`
-                    : "Chọn tác giả"
+                    ? `${formData.author_ids.length} authors selected`
+                    : "Select author"
                   }
                 </Button>
               </PopoverTrigger>
@@ -375,7 +375,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                       type="text"
                       value={authorSearch}
                       onChange={(e) => setAuthorSearch(e.target.value)}
-                      placeholder="Tìm tác giả..."
+                      placeholder="Search author..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -411,7 +411,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Categories Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Danh mục
+              Category
             </label>
             <Popover>
               <PopoverTrigger asChild>
@@ -422,8 +422,8 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {formData.category_ids.length > 0 
-                    ? `${formData.category_ids.length} danh mục đã chọn`
-                    : "Chọn danh mục"
+                    ? `${formData.category_ids.length} categories selected`
+                    : "Select category"
                   }
                 </Button>
               </PopoverTrigger>
@@ -435,7 +435,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                       type="text"
                       value={categorySearch}
                       onChange={(e) => setCategorySearch(e.target.value)}
-                      placeholder="Tìm danh mục..."
+                      placeholder="Search category..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -471,7 +471,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Cover Image */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Ảnh bìa
+              Cover image
             </label>
             {coverPreview ? (
               <div className="relative inline-block">
@@ -505,7 +505,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                     <ImageIcon className="w-8 h-8 text-blue-600" />
                   </div>
                   <p className="text-sm font-medium text-gray-700 mb-1">
-                    Click để tải ảnh bìa
+                    Click to upload cover image
                   </p>
                   <p className="text-xs text-gray-500">
                     PNG, JPG, GIF (Max 5MB)
@@ -518,7 +518,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Sample Pages */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Trang mẫu
+              Sample pages
             </label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
               <input
@@ -537,10 +537,10 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                   <ImageIcon className="w-8 h-8 text-blue-600" />
                 </div>
                 <p className="text-sm font-medium text-gray-700 mb-1">
-                  Click để tải trang mẫu
+                  Click to upload sample pages
                 </p>
                 <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF (Max 5MB mỗi file)
+                  PNG, JPG, GIF (Max 5MB per file)
                 </p>
               </label>
             </div>
@@ -576,7 +576,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -586,10 +586,10 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Đang lưu...
+                  Saving...
                 </>
               ) : (
-                <>{book ? "Cập nhật" : "Thêm sách"}</>
+                <>{book ? "Update" : "Add book"}</>
               )}
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { apiBase, apiFormData } from "./api";
-
+import { apiBase as api } from "./api";
 /**
  * Lấy danh sách sách với các tham số lọc
  * @param {Object} params - Các tham số query
@@ -118,6 +118,30 @@ const BookService = {
         return response;
       } catch (error) {
         console.error("Error deleting book:", error);
+        throw error;
+      }
+    },
+
+    // Lấy danh sách sách đã xóa
+    getDeletedBooks: async (page = 1, perPage = 10) => {
+      try {
+        const response = await api.get("/admin/books/deleted/list", {
+          params: { page, per_page: perPage },
+        });
+        return response;
+      } catch (error) {
+        console.error("Error fetching deleted books:", error);
+        throw error;
+      }
+    },
+
+    // Khôi phục sách đã xóa
+    restoreBook: async (id) => {
+      try {
+        const response = await api.post(`/admin/books/${id}/restore`);
+        return response;
+      } catch (error) {
+        console.error("Error restoring book:", error);
         throw error;
       }
     },

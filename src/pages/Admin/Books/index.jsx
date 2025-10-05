@@ -38,6 +38,7 @@ import {
 import BookService from "@/services/book.service";
 import { toast } from "sonner";
 import BookForm from "./BookForm";
+import TrashDialog from "./TrashDialog";
 
 const AdminBooksPage = () => {
   const [books, setBooks] = useState([]);
@@ -50,6 +51,7 @@ const AdminBooksPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [deletePopoverOpen, setDeletePopoverOpen] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [trashDialogOpen, setTrashDialogOpen] = useState(false);
   const perPage = 10;
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const AdminBooksPage = () => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching books:", error);
-      toast.error("Không thể tải danh sách sách");
+      toast.error("Failed to load books");
     } finally {
       setLoading(false);
     }
@@ -109,13 +111,13 @@ const AdminBooksPage = () => {
     try {
       setDeleting(true);
       await BookService.admin.deleteBook(id);
-      toast.success("Xóa sách thành công");
+      toast.success("Book deleted successfully");
       setDeletePopoverOpen(null);
       fetchBooks();
     } catch (error) {
       console.error("Error deleting book:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể xóa sách";
+        error.response?.data?.errors?.[0] || "Failed to delete book";
       toast.error(errorMessage);
     } finally {
       setDeleting(false);
@@ -138,17 +140,25 @@ const AdminBooksPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quản lý sách
+              Manage books
             </h1>
-            <p className="text-gray-600">Tổng số: {totalCount} sách</p>
+            <p className="text-gray-600">Total: {totalCount} books</p>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setTrashDialogOpen(true)}
+              className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Trash
+            </Button>
             <Button
               onClick={handleAddNew}
               className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Thêm sách
+              Add book
             </Button>
           </div>
         </div>
@@ -160,7 +170,7 @@ const AdminBooksPage = () => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm sách..."
+            placeholder="Search books..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -177,12 +187,12 @@ const AdminBooksPage = () => {
             <div className="text-center py-20">
               <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "Không tìm thấy sách" : "Chưa có sách nào"}
+                {searchQuery ? "No books found" : "No books yet"}
               </h3>
               <p className="text-gray-600 mb-6">
                 {searchQuery
-                  ? "Thử tìm kiếm với từ khóa khác"
-                  : "Thêm sách đầu tiên để bắt đầu"}
+                  ? "Try searching with a different keyword"
+                  : "Add the first book to start"}
               </p>
               {!searchQuery && (
                 <Button
@@ -190,7 +200,7 @@ const AdminBooksPage = () => {
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Thêm sách
+                  Add book
                 </Button>
               )}
             </div>
@@ -200,15 +210,15 @@ const AdminBooksPage = () => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold w-[100px]">Ảnh</TableHead>
-                    <TableHead className="font-semibold">Tên sách</TableHead>
-                    <TableHead className="font-semibold">Tác giả</TableHead>
-                    <TableHead className="font-semibold">Danh mục</TableHead>
-                    <TableHead className="font-semibold">Giá</TableHead>
-                    <TableHead className="font-semibold">Tồn kho</TableHead>
-                    <TableHead className="font-semibold">Trạng thái</TableHead>
+                    <TableHead className="font-semibold w-[100px]">Image</TableHead>
+                    <TableHead className="font-semibold">Title</TableHead>
+                    <TableHead className="font-semibold">Author</TableHead>
+                    <TableHead className="font-semibold">Category</TableHead>
+                    <TableHead className="font-semibold">Price</TableHead>
+                    <TableHead className="font-semibold">Stock</TableHead>
+                    <TableHead className="font-semibold">Status</TableHead>
                     <TableHead className="text-right font-semibold w-[120px]">
-                      Thao tác
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -237,7 +247,7 @@ const AdminBooksPage = () => {
                           {book.featured && (
                             <div className="flex items-center gap-1 mt-1">
                               <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                              <span className="text-xs text-yellow-600">Nổi bật</span>
+                              <span className="text-xs text-yellow-600">Featured</span>
                             </div>
                           )}
                         </div>
@@ -283,7 +293,7 @@ const AdminBooksPage = () => {
                               : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {book.stock_quantity > 0 ? "Còn hàng" : "Hết hàng"}
+                          {book.stock_quantity > 0 ? "In stock" : "Out of stock"}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -293,7 +303,7 @@ const AdminBooksPage = () => {
                             size="sm"
                             onClick={() => handleEdit(book)}
                             className="hover:bg-blue-50 hover:text-blue-600"
-                            title="Chỉnh sửa"
+                            title="Edit"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -310,7 +320,7 @@ const AdminBooksPage = () => {
                                 variant="ghost"
                                 size="sm"
                                 className="hover:bg-red-50 hover:text-red-600"
-                                title="Xóa"
+                                title="Delete"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -323,10 +333,10 @@ const AdminBooksPage = () => {
                                   </div>
                                   <div className="flex-1">
                                     <h3 className="font-semibold text-gray-900 mb-1">
-                                      Xác nhận xóa
+                                      Confirm delete
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                      Bạn có chắc chắn muốn xóa sách{" "}
+                                      Are you sure you want to delete the book{" "}
                                       <span className="font-semibold">
                                         "{book.title}"
                                       </span>
@@ -343,7 +353,7 @@ const AdminBooksPage = () => {
                                     disabled={deleting}
                                     className="flex-1"
                                   >
-                                    Hủy
+                                    Cancel
                                   </Button>
                                   <Button
                                     size="sm"
@@ -354,10 +364,10 @@ const AdminBooksPage = () => {
                                     {deleting ? (
                                       <>
                                         <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                        Đang xóa...
+                                        Deleting...
                                       </>
                                     ) : (
-                                      "Xóa"
+                                      "Delete"
                                     )}
                                   </Button>
                                 </div>
@@ -445,6 +455,13 @@ const AdminBooksPage = () => {
         open={formOpen}
         onClose={handleFormClose}
         onSuccess={handleFormSuccess}
+      />
+
+      {/* Trash Dialog */}
+      <TrashDialog
+        open={trashDialogOpen}
+        onClose={() => setTrashDialogOpen(false)}
+        onRestore={fetchBooks}
       />
     </div>
   );
