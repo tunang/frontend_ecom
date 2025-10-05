@@ -42,10 +42,10 @@ apiBase.interceptors.response.use(
       switch (status) {
         case 401:
           // Unauthorized - Token hết hạn hoặc không hợp lệ
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
           // Có thể redirect về trang login
-          // window.location.href = "/login";
+          window.location.href = "/login";
           break;
           
         case 403:

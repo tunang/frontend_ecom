@@ -71,7 +71,7 @@ const AuthorsPage = () => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching authors:", error);
-      toast.error("Không thể tải danh sách tác giả");
+      toast.error("Failed to load authors");
     } finally {
       setLoading(false);
     }
@@ -107,13 +107,13 @@ const AuthorsPage = () => {
     try {
       setDeleting(true);
       await AuthorService.admin.deleteAuthor(id);
-      toast.success("Xóa tác giả thành công");
+      toast.success("Delete author successfully");
       setDeletePopoverOpen(null);
       fetchAuthors();
     } catch (error) {
       console.error("Error deleting author:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể xóa tác giả";
+        error.response?.data?.errors?.[0] || "Failed to delete author";
       toast.error(errorMessage);
     } finally {
       setDeleting(false);
@@ -132,9 +132,9 @@ const AuthorsPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quản lý tác giả
+              Manage authors
             </h1>
-            <p className="text-gray-600">Tổng số: {totalCount} tác giả</p>
+            <p className="text-gray-600">Total: {totalCount} authors</p>
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -143,14 +143,14 @@ const AuthorsPage = () => {
               className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <Trash2 className="w-4 h-4 mr-2" />
-              Thùng rác
+              Trash
             </Button>
             <Button
               onClick={handleAddNew}
               className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Thêm tác giả
+              Add author
             </Button>
           </div>
         </div>
@@ -162,7 +162,7 @@ const AuthorsPage = () => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm tác giả..."
+            placeholder="Search author..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -179,12 +179,12 @@ const AuthorsPage = () => {
             <div className="text-center py-20">
               <User className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "Không tìm thấy tác giả" : "Chưa có tác giả nào"}
+                {searchQuery ? "No author found" : "No author yet"}
               </h3>
               <p className="text-gray-600 mb-6">
                 {searchQuery
-                  ? "Thử tìm kiếm với từ khóa khác"
-                  : "Thêm tác giả đầu tiên để bắt đầu"}
+                  ? "Try searching with a different keyword"
+                  : "Add the first author to start"}
               </p>
               {!searchQuery && (
                 <Button
@@ -192,7 +192,7 @@ const AuthorsPage = () => {
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Thêm tác giả
+                  Add author
                 </Button>
               )}
             </div>
@@ -202,13 +202,13 @@ const AuthorsPage = () => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold w-[100px]">Ảnh</TableHead>
-                    <TableHead className="font-semibold">Tên tác giả</TableHead>
-                    <TableHead className="font-semibold">Quốc tịch</TableHead>
-                    <TableHead className="font-semibold">Ngày sinh</TableHead>
-                    <TableHead className="font-semibold">Tiểu sử</TableHead>
+                      <TableHead className="font-semibold w-[100px]">Image</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semobold">Nationality</TableHead>
+                    <TableHead className="font-semobold">Birth date</TableHead>
+                    <TableHead className="font-semobold">Biography</TableHead>
                     <TableHead className="text-right font-semibold w-[120px]">
-                      Thao tác
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -266,7 +266,7 @@ const AuthorsPage = () => {
                             size="sm"
                             onClick={() => handleEdit(author)}
                             className="hover:bg-blue-50 hover:text-blue-600"
-                            title="Chỉnh sửa"
+                            title="Edit"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -283,7 +283,7 @@ const AuthorsPage = () => {
                                 variant="ghost"
                                 size="sm"
                                 className="hover:bg-red-50 hover:text-red-600"
-                                title="Xóa"
+                                title="Delete"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -296,10 +296,10 @@ const AuthorsPage = () => {
                                   </div>
                                   <div className="flex-1">
                                     <h3 className="font-semibold text-gray-900 mb-1">
-                                      Xác nhận xóa
+                                      Confirm delete
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                      Bạn có chắc chắn muốn xóa tác giả{" "}
+                                      Are you sure you want to delete the author{" "}
                                       <span className="font-semibold">
                                         "{author.name}"
                                       </span>
@@ -316,7 +316,7 @@ const AuthorsPage = () => {
                                     disabled={deleting}
                                     className="flex-1"
                                   >
-                                    Hủy
+                                    Cancel
                                   </Button>
                                   <Button
                                     size="sm"
@@ -327,10 +327,10 @@ const AuthorsPage = () => {
                                     {deleting ? (
                                       <>
                                         <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                        Đang xóa...
+                                        Deleting...
                                       </>
                                     ) : (
-                                      "Xóa"
+                                      "Delete"
                                     )}
                                   </Button>
                                 </div>

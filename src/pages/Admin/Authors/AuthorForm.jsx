@@ -88,18 +88,18 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
       if (author) {
         // Update existing author
         await AuthorService.admin.updateAuthor(author.id, submitData);
-        toast.success("Cập nhật tác giả thành công");
+        toast.success("Update author successfully");
       } else {
         // Create new author
         await AuthorService.admin.createAuthor(submitData);
-        toast.success("Thêm tác giả thành công");
+        toast.success("Add author successfully");
       }
       onSuccess();
     } catch (error) {
       console.error("Error saving author:", error);
       const errorMessage =
         error.response?.data?.errors?.[0] ||
-        (author ? "Không thể cập nhật tác giả" : "Không thể thêm tác giả");
+        (author ? "Failed to update author" : "Failed to add author");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -111,7 +111,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-blue-900">
-            {author ? "Chỉnh sửa tác giả" : "Thêm tác giả mới"}
+            {author ? "Edit author" : "Add author"}
           </DialogTitle>
         </DialogHeader>
 
@@ -120,7 +120,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tên tác giả <span className="text-red-500">*</span>
+              Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -129,7 +129,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Ví dụ: Nguyễn Nhật Ánh"
+              placeholder="Example: John Doe"
             />
           </div>
 
@@ -137,7 +137,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Quốc tịch
+                Nationality
               </label>
               <input
                 type="text"
@@ -145,13 +145,13 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
                 value={formData.nationality}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Ví dụ: Vietnamese"
+                placeholder="Example: Vietnamese"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Ngày sinh
+                Birth date
               </label>
               <input
                 type="date"
@@ -166,7 +166,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
           {/* Biography */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tiểu sử
+              Biography
             </label>
             <textarea
               name="biography"
@@ -174,14 +174,14 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
               onChange={handleChange}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              placeholder="Thông tin về tác giả..."
+              placeholder="Information about the author..."
             />
           </div>
 
           {/* Photo Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Ảnh tác giả
+                Author image
             </label>
 
             {photoPreview ? (
@@ -216,7 +216,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
                     <ImageIcon className="w-8 h-8 text-blue-600" />
                   </div>
                   <p className="text-sm font-medium text-gray-700 mb-1">
-                    Click để tải ảnh lên
+                    Click to upload image
                   </p>
                   <p className="text-xs text-gray-500">
                     PNG, JPG, GIF (Max 5MB)
@@ -235,7 +235,7 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -245,10 +245,10 @@ const AuthorForm = ({ author, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Đang lưu...
+                  Saving...
                 </>
               ) : (
-                <>{author ? "Cập nhật" : "Thêm tác giả"}</>
+                <>{author ? "Update" : "Add author"}</>
               )}
             </Button>
           </div>

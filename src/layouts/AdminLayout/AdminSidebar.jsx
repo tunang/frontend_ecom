@@ -34,42 +34,42 @@ const AdminSidebar = ({ onLinkClick }) => {
     {
       to: "/admin/books",
       icon: BookOpen,
-      label: "Sách",
+      label: "Books",
       color: "text-amber-600",
       bgColor: "bg-amber-50",
     },
     {
       to: "/admin/categories",
       icon: Tags,
-      label: "Danh mục",
+      label: "Categories",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
     },
     {
       to: "/admin/authors",
       icon: UserPen,
-      label: "Tác giả",
+      label: "Authors",
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
     {
       to: "/admin/orders",
       icon: ShoppingBag,
-      label: "Đơn hàng",
+      label: "Orders",
       color: "text-green-600",
       bgColor: "bg-green-50",
     },
     {
       to: "/admin/users",
       icon: Users,
-      label: "Người dùng",
+      label: "Users",
       color: "text-indigo-600",
       bgColor: "bg-indigo-50",
     },
     {
       to: "/admin/settings",
       icon: Settings,
-      label: "Cài đặt",
+      label: "Settings",
       color: "text-gray-600",
       bgColor: "bg-gray-50",
     },
@@ -92,7 +92,7 @@ const AdminSidebar = ({ onLinkClick }) => {
           </div>
           <div>
             <h2 className="font-bold text-xl">Admin Panel</h2>
-            <p className="text-xs text-amber-100">Quản lý hệ thống</p>
+            <p className="text-xs text-amber-100">System management</p>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ const AdminSidebar = ({ onLinkClick }) => {
                 <Home className="h-4 w-4 text-amber-600" />
               </div>
               <span className="font-medium text-gray-700 text-sm">
-                Về trang chủ
+                Back to home
               </span>
             </div>
             <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />

@@ -56,19 +56,19 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
       if (address) {
         // Update existing address
         await AddressService.updateAddress(address.id, formData);
-        toast.success("Cập nhật địa chỉ thành công");
+        toast.success("Update address successfully");
       } else {
         // Create new address
         await AddressService.createAddress(formData);
-        toast.success("Thêm địa chỉ thành công");
+        toast.success("Add address successfully");
       }
       onSuccess();
     } catch (error) {
       console.error("Error saving address:", error);
       toast.error(
         address
-          ? "Không thể cập nhật địa chỉ"
-          : "Không thể thêm địa chỉ"
+          ? "Failed to update address"
+          : "Failed to add address"
       );
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            {address ? "Chỉnh sửa địa chỉ" : "Thêm địa chỉ mới"}
+            {address ? "Edit address" : "Add address"}
           </DialogTitle>
         </DialogHeader>
 
@@ -90,7 +90,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Họ <span className="text-red-500">*</span>
+                  First name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -99,12 +99,12 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Nguyễn Văn"
+                  placeholder="John Doe"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tên <span className="text-red-500">*</span>
+                  Last name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -113,7 +113,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="A"
+                  placeholder="Doe"
                 />
               </div>
             </div>
@@ -121,7 +121,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
             {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Số điện thoại <span className="text-red-500">*</span>
+                Phone <span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -130,14 +130,14 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                placeholder="0912345678"
+                placeholder="09123456789"
               />
             </div>
 
             {/* Address Line 1 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Địa chỉ <span className="text-red-500">*</span>
+                Address <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -146,14 +146,14 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                placeholder="123 Đường ABC"
+                  placeholder="123 ABC Street"
               />
             </div>
 
             {/* Address Line 2 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Địa chỉ 2 (Tùy chọn)
+                Address 2 (Optional)
               </label>
               <input
                 type="text"
@@ -161,7 +161,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                 value={formData.address_line_2}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                placeholder="Căn hộ, Tòa nhà..."
+                placeholder="Apartment, Building..."
               />
             </div>
 
@@ -169,7 +169,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Thành phố <span className="text-red-500">*</span>
+                  City <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -178,12 +178,12 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Hà Nội"
+                  placeholder="Hanoi"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Quận/Huyện <span className="text-red-500">*</span>
+                  State <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -192,7 +192,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Ba Đình"
+                  placeholder="Ba Dinh"
                 />
               </div>
             </div>
@@ -201,7 +201,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Mã bưu điện <span className="text-red-500">*</span>
+                  Postal code <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -210,12 +210,12 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="100000"
+                  placeholder="1000000"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Quốc gia <span className="text-red-500">*</span>
+                  Country <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -224,7 +224,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Vietnam"
+                  placeholder="Vietnam, USA, etc."
                 />
               </div>
             </div>
@@ -238,7 +238,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -248,7 +248,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Đang lưu...
+                  Saving...
                 </>
               ) : (
                 <>{address ? "Cập nhật" : "Thêm địa chỉ"}</>

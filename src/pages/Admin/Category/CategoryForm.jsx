@@ -220,11 +220,11 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                     </span>
                   ) : (
                     <span className="text-gray-500">
-                      -- Không có danh mục cha --
+                      Không có danh mục cha
                     </span>
                   )}
                   <div className="flex items-center gap-1">
-                    {selectedParent && (
+                    {/* {selectedParent && (
                       <X
                         className="h-4 w-4 text-gray-400 hover:text-gray-600"
                         onClick={(e) => {
@@ -232,7 +232,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                           handleClearParent();
                         }}
                       />
-                    )}
+                    )} */}
                     <ChevronDown className="h-4 w-4 text-gray-400" />
                   </div>
                 </Button>
