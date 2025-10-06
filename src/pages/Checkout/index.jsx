@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 import AddressService from "@/services/address.service";
 import OrderService from "@/services/order.service";
-import useCartStore from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();

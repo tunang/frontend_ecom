@@ -74,3 +74,21 @@ export const resetPasswordFormSchema = z
     message: "Mật khẩu xác nhận không khớp",
     path: ["confirmation_password"],
   });
+
+// Change Password Schema
+export const changePasswordSchema = z
+  .object({
+    current_password: z
+      .string()
+      .min(1, "Mật khẩu hiện tại là bắt buộc"),
+    password: z
+      .string()
+      .min(1, "Mật khẩu mới là bắt buộc")
+      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số"),
+    password_confirmation: z.string().min(1, "Xác nhận mật khẩu là bắt buộc"),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Mật khẩu xác nhận không khớp",
+    path: ["password_confirmation"],
+  });

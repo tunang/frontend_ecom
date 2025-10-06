@@ -38,7 +38,7 @@ const ForgotPasswordPage = () => {
       if (response?.status?.message === "reset_email_sent") {
         setSentEmail(data.email);
         setEmailSent(true);
-        toast.success("Email khôi phục mật khẩu đã được gửi!", {
+        toast.success("Email reset password has been sent!", {
           duration: 5000,
         });
       }
@@ -50,11 +50,11 @@ const ForgotPasswordPage = () => {
 
       if (errorMsg === "email_not_found") {
         const errors = errorData?.errors || [];
-        toast.error(errors[0] || "Email không tồn tại trong hệ thống.", {
+        toast.error(errors[0] || "Email not found in the system.", {
           duration: 5000,
         });
       } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.", {
+        toast.error("An error occurred. Please try again later.", {
           duration: 5000,
         });
       }
@@ -76,13 +76,13 @@ const ForgotPasswordPage = () => {
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Kiểm tra email của bạn
+                  Check your email
                 </h2>
 
                 <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
                   <Mail className="w-6 h-6 text-amber-600 mx-auto mb-2" />
                   <p className="text-sm text-gray-700">
-                    Chúng tôi đã gửi link khôi phục mật khẩu đến
+                    We have sent the reset password link to
                   </p>
                   <p className="text-sm font-semibold text-amber-600 mt-1">
                     {sentEmail}
@@ -90,13 +90,13 @@ const ForgotPasswordPage = () => {
                 </div>
 
                 <p className="text-sm text-gray-600">
-                  Vui lòng kiểm tra hộp thư và nhấp vào liên kết để đặt lại mật khẩu.
-                  Link sẽ hết hạn sau 24 giờ.
+                  Please check your email and click the link to reset your password.
+                  The link will expire in 24 hours.
                 </p>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                   <p className="text-xs text-gray-600">
-                    💡 <strong>Mẹo:</strong> Nếu không thấy email, hãy kiểm tra thư mục Spam hoặc Junk.
+                    💡 <strong>Tip:</strong> If you don't see the email, please check your spam or junk folder.
                   </p>
                 </div>
 
@@ -110,12 +110,12 @@ const ForgotPasswordPage = () => {
                     className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-2.5 rounded-md transition-colors duration-200"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    Gửi lại với email khác
+                    Send again with a different email
                   </Button>
 
                   <Link to="/login">
                     <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-md transition-colors duration-200">
-                      Quay lại đăng nhập
+                      Back to login
                     </Button>
                   </Link>
                 </div>
@@ -133,10 +133,10 @@ const ForgotPasswordPage = () => {
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Quên mật khẩu?
+            Forgot password?
           </h1>
           <p className="text-gray-600">
-            Nhập email của bạn để nhận link khôi phục mật khẩu
+            Enter your email to receive the reset password link
           </p>
         </div>
 
@@ -161,7 +161,7 @@ const ForgotPasswordPage = () => {
               {/* Info Box */}
               <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                 <p className="text-xs text-gray-600">
-                  Bạn sẽ nhận được email chứa link để đặt lại mật khẩu. Link này có hiệu lực trong 24 giờ.
+                  You will receive an email containing the reset password link. The link will expire in 24 hours.
                 </p>
               </div>
 
@@ -174,10 +174,10 @@ const ForgotPasswordPage = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Đang gửi...
+                      Sending...
                   </>
                 ) : (
-                  "Gửi link khôi phục"
+                  "Send reset link"
                 )}
               </Button>
             </form>
@@ -189,7 +189,7 @@ const ForgotPasswordPage = () => {
                 className="inline-flex items-center gap-2 text-sm text-amber-600 hover:text-amber-700 font-medium transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Quay lại đăng nhập
+                Back to login
               </Link>
             </div>
           </CardContent>
@@ -197,12 +197,12 @@ const ForgotPasswordPage = () => {
 
         {/* Register Link */}
         <p className="text-center mt-6 text-gray-600">
-          Chưa có tài khoản?{" "}
+          Don't have an account?{" "}
           <Link
             to="/register"
             className="text-amber-600 hover:text-amber-700 font-semibold transition-colors"
           >
-            Đăng ký ngay
+            Register now
           </Link>
         </p>
       </div>

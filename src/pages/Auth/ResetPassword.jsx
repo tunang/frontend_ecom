@@ -38,7 +38,7 @@ const ResetPasswordPage = () => {
   useEffect(() => {
     if (!resetToken) {
       setTokenError(true);
-      toast.error("Liên kết đặt lại mật khẩu không hợp lệ.", {
+      toast.error("Reset password link is invalid.", {
         duration: 5000,
       });
     }
@@ -46,7 +46,7 @@ const ResetPasswordPage = () => {
 
   const onSubmit = async (data) => {
     if (!resetToken) {
-      toast.error("Token không hợp lệ.", { duration: 3000 });
+      toast.error("Token is invalid.", { duration: 3000 });
       return;
     }
 
@@ -63,7 +63,7 @@ const ResetPasswordPage = () => {
 
       if (response?.status?.message === "password_successfully_reset") {
         setResetSuccess(true);
-        toast.success("Mật khẩu đã được đặt lại thành công!", {
+        toast.success("Password has been reset successfully!", {
           duration: 5000,
         });
 
@@ -77,13 +77,13 @@ const ResetPasswordPage = () => {
       const errorMsg = errorData?.status?.message;
 
       if (errorMsg === "invalid_reset_token" || errorMsg === "reset_token_expired") {
-        toast.error("Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.", {
+        toast.error("Reset password link is invalid or expired.", {
           duration: 5000,
         });
         setTokenError(true);
       } else {
         const errors = errorData?.errors || [];
-        toast.error(errors[0] || "Đặt lại mật khẩu thất bại. Vui lòng thử lại.", {
+        toast.error(errors[0] || "Reset password failed. Please try again.", {
           duration: 5000,
         });
       }
@@ -105,25 +105,25 @@ const ResetPasswordPage = () => {
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Đặt lại mật khẩu thành công!
+                  Password reset successful!
                 </h2>
 
                 <div className="bg-green-50 border border-green-200 rounded-md p-4">
                   <Lock className="w-6 h-6 text-green-600 mx-auto mb-2" />
                   <p className="text-sm text-gray-700">
-                    Mật khẩu của bạn đã được cập nhật.
+                    Your password has been updated.
                   </p>
                 </div>
 
                 <p className="text-sm text-gray-600">
-                  Bạn sẽ được chuyển đến trang đăng nhập sau 3 giây...
+                  You will be redirected to the login page after 3 seconds...
                 </p>
 
                 <Button
                   onClick={() => navigate("/login")}
                   className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-md transition-colors duration-200"
                 >
-                  Đăng nhập ngay
+                  Login now
                 </Button>
               </div>
             </CardContent>
@@ -146,23 +146,23 @@ const ResetPasswordPage = () => {
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Link không hợp lệ
+                  Invalid link
                 </h2>
 
                 <div className="bg-red-50 border border-red-200 rounded-md p-4">
                   <p className="text-sm text-red-700">
-                    Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.
+                    Reset password link is invalid or expired.
                   </p>
                 </div>
 
                 <p className="text-sm text-gray-600">
-                  Vui lòng yêu cầu link mới để đặt lại mật khẩu.
+                    Please request a new link to reset your password.
                 </p>
 
                 <div className="space-y-3 pt-4">
                   <Link to="/forgot-password">
                     <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-md transition-colors duration-200">
-                      Yêu cầu link mới
+                      Request new link
                     </Button>
                   </Link>
 
@@ -171,7 +171,7 @@ const ResetPasswordPage = () => {
                       variant="outline"
                       className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-2.5 rounded-md transition-colors duration-200"
                     >
-                      Quay lại đăng nhập
+                      Back to login
                     </Button>
                   </Link>
                 </div>
@@ -189,10 +189,10 @@ const ResetPasswordPage = () => {
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Đặt lại mật khẩu
+            Reset password
           </h1>
           <p className="text-gray-600">
-            Nhập mật khẩu mới cho tài khoản của bạn
+            Enter your new password
           </p>
         </div>
 
@@ -202,7 +202,7 @@ const ResetPasswordPage = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password">Mật khẩu mới</Label>
+                <Label htmlFor="password">New password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -228,13 +228,13 @@ const ResetPasswordPage = () => {
                   </p>
                 )}
                 <p className="text-xs text-gray-500">
-                  Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất 1 số
+                  Password must be at least 8 characters and contain at least 1 number
                 </p>
               </div>
 
               {/* Confirm Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="confirmation_password">Xác nhận mật khẩu mới</Label>
+                <Label htmlFor="confirmation_password">Confirm new password</Label>
                 <div className="relative">
                   <Input
                     id="confirmation_password"
@@ -264,7 +264,7 @@ const ResetPasswordPage = () => {
               {/* Info Box */}
               <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                 <p className="text-xs text-gray-600">
-                  🔒 Sau khi đặt lại mật khẩu, bạn sẽ cần đăng nhập lại với mật khẩu mới.
+                  🔒 After resetting your password, you will need to login with your new password.
                 </p>
               </div>
 
@@ -277,10 +277,10 @@ const ResetPasswordPage = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Đang đặt lại mật khẩu...
+                    Resetting password...
                   </>
                 ) : (
-                  "Đặt lại mật khẩu"
+                  "Reset password"
                 )}
               </Button>
             </form>
@@ -291,7 +291,7 @@ const ResetPasswordPage = () => {
                 to="/login"
                 className="text-sm text-amber-600 hover:text-amber-700 font-medium transition-colors"
               >
-                Quay lại đăng nhập
+                Back to login
               </Link>
             </div>
           </CardContent>

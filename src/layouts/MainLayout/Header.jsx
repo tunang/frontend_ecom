@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   BookOpenIcon,
   LogInIcon,
@@ -20,9 +20,12 @@ import { useAuthStore } from "../../store/useAuthStore";
 import CategoryMenu from "@/components/CategoryMenu";
 import SearchBar from "@/components/SearchBar";
 import MobileNavbar from "../../components/MobileNavbar";
-
+import CartUtils from "../../util/CartUtils";
+import { useCartStore } from "../../store/useCartStore";
 const Header = () => {
   const { user, logout } = useAuthStore();
+  const { items } = useCartStore();
+  const navigate = useNavigate();
 
   const [openPopover, setOpenPopover] = useState(false);
   
@@ -47,11 +50,11 @@ const Header = () => {
             </div>
             <div className="hidden sm:flex flex-col">
               <span className="text-lg sm:text-xl font-bold text-amber-700 group-hover:text-amber-800 transition-colors">
-                BookStore
+                Sahafa
               </span>
-              <span className="text-xs text-amber-600 font-medium hidden md:block">
-                Thế giới sách trong tầm tay
-              </span>
+              {/* <span className="text-xs text-amber-600 font-medium hidden md:block">
+                The world of books in your hand
+              </span> */}
             </div>
           </Link>
 
@@ -63,8 +66,13 @@ const Header = () => {
 
           {/* Right */}
           <div className="flex items-center gap-2 sm:gap-4">
-            <Link to="/cart" className="flex-shrink-0">
-              <ShoppingBag className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 hover:text-amber-700 hover:bg-amber-100 rounded p-1 cursor-pointer transition-colors" />
+            <Link to="/cart" className="flex-shrink-0 relative">
+              <ShoppingBag className="h-6 w-6 sm:h-6 sm:w-6 text-amber-600 hover:text-amber-700 hover:bg-amber-100 rounded cursor-pointer transition-colors" />
+              {items.length > 0 && (
+                <span className="absolute -top-3 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {CartUtils.getCartTotalQuantity(items)}
+                  </span>
+              )}
             </Link>
             
             {/* Desktop User Menu */}
@@ -77,7 +85,6 @@ const Header = () => {
               </PopoverTrigger>
 
               <PopoverContent className="w-fit mt-2 p-3" align="end">
-                <span>{JSON.stringify(user, null, 2)}</span>
                 {user ? (
                   <nav className="flex flex-col items-start gap-3 p-2">
                     <Link

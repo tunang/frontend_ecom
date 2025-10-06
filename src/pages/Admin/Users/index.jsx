@@ -48,7 +48,7 @@ const AdminUsersPage = () => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Không thể tải danh sách người dùng");
+      toast.error("Cannot load user list");
     } finally {
       setLoading(false);
     }
@@ -66,9 +66,9 @@ const AdminUsersPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quản lý người dùng
+              Manage users
             </h1>
-            <p className="text-gray-600">Tổng số: {totalCount} người dùng</p>
+            <p className="text-gray-600">Total: {totalCount} users</p>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ const AdminUsersPage = () => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm theo tên hoặc email..."
+            placeholder="Search by name or email..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -96,10 +96,10 @@ const AdminUsersPage = () => {
             <div className="text-center py-20">
               <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "Không tìm thấy người dùng" : "Chưa có người dùng"}
+                {searchQuery ? "No user found" : "No user found"}
               </h3>
               <p className="text-gray-600">
-                {searchQuery ? "Thử từ khóa khác" : "Danh sách sẽ hiển thị tại đây"}
+                {searchQuery ? "Try another keyword" : "The list will be displayed here"}
               </p>
             </div>
           ) : (
@@ -108,7 +108,7 @@ const AdminUsersPage = () => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold">Tên</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
                     <TableHead className="font-semibold">Email</TableHead>
                     <TableHead className="font-semibold w-[140px]">Vai trò</TableHead>
                   </TableRow>
@@ -132,7 +132,7 @@ const AdminUsersPage = () => {
                           }`}
                         >
                           <Shield className="w-3 h-3" />
-                          {u.role === "admin" ? "Quản trị" : "Người dùng"}
+                            {u.role === "admin" ? "Admin" : "User"}
                         </span>
                       </TableCell>
                     </TableRow>

@@ -227,17 +227,16 @@ const AdminBooksPage = () => {
                     <TableRow key={book.id} className="hover:bg-gray-50">
                       <TableCell className="font-medium">{book.id}</TableCell>
                       <TableCell>
-                        {book.cover_image_url ? (
                           <img
                             src={`${import.meta.env.VITE_API_IMAGE_URL}${book.cover_image_url}`}
                             alt={book.title}
+                            onError={(e) => {
+                              e.target.src =
+                                "https://placehold.co/150?text=X&font=roboto";
+                            }}
                             className="w-12 h-16 rounded object-cover border-2 border-gray-200"
                           />
-                        ) : (
-                          <div className="w-12 h-16 rounded bg-gray-100 flex items-center justify-center">
-                            <BookOpen className="w-6 h-6 text-gray-400" />
-                          </div>
-                        )}
+                
                       </TableCell>
                       <TableCell>
                         <div>

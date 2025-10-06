@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import cartService from "../services/cart.service";
 
-const useCartStore = create((set, get) => ({
+export const useCartStore = create((set, get) => ({
   items: [],
   selectedItems: [],
   message: null,
@@ -35,11 +35,11 @@ const useCartStore = create((set, get) => ({
       if (existingItem) {
         const updatedItems = items.map((item) =>
           item.book.id === response.data.book.id
-            ? { ...item, quantity: item.quantity + response.data.quantity }
+            ? { ...item, quantity: response.data.quantity }
             : item
         );
         console.log("Updated items (existing):", updatedItems);
-        set({ items: updatedItems });
+        set({ items: updatedItems, message: response.status.message });
       } else {
         const newItems = [...items, response.data];
         console.log("Updated items (new):", newItems);
@@ -168,6 +168,23 @@ const useCartStore = create((set, get) => ({
         return total + discountedPrice * item.quantity;
       }, 0);
   },
+
+  clearMessage: () => {
+    set({ message: null });
+  },
+
+  // Reset cart state về initial state (dùng khi logout)
+  resetCart: () => {
+    set({
+      items: [],
+      selectedItems: [],
+      message: null,
+      isLoading: false,
+      totalItems: 0,
+      totalAmount: 0,
+      selectedTotalItems: 0,
+      selectedTotalAmount: 0,
+    });
+  },
 }));
 
-export default useCartStore;

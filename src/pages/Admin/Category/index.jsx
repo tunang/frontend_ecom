@@ -70,7 +70,7 @@ const CategoryPage = () => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching categories:", error);
-      toast.error("Không thể tải danh sách danh mục");
+        toast.error("Cannot load categories list");
     } finally {
       setLoading(false);
     }
@@ -111,13 +111,13 @@ const CategoryPage = () => {
     try {
       setDeleting(true);
       await CategoryService.admin.deleteCategory(id);
-      toast.success("Xóa danh mục thành công");
+      toast.success("Delete category successfully");
       setDeletePopoverOpen(null);
       fetchCategories();
     } catch (error) {
       console.error("Error deleting category:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể xóa danh mục";
+        error.response?.data?.errors?.[0] || "Cannot delete category";
       toast.error(errorMessage);
     } finally {
       setDeleting(false);
@@ -131,9 +131,9 @@ const CategoryPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quản lý danh mục
+              Manage categories
             </h1>
-            <p className="text-gray-600">Tổng số: {totalCount} danh mục</p>
+            <p className="text-gray-600">Total: {totalCount} categories</p>
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -142,14 +142,14 @@ const CategoryPage = () => {
               className="flex items-center gap-2 border-gray-300 hover:bg-gray-50"
             >
               <Trash2 className="w-4 h-4" />
-              Thùng rác
+              Trash
             </Button>
             <Button
               onClick={handleAddNew}
               className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Thêm danh mục
+              Add category
             </Button>
           </div>
         </div>
@@ -161,7 +161,7 @@ const CategoryPage = () => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm danh mục..."
+            placeholder="Search categories..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
@@ -184,12 +184,12 @@ const CategoryPage = () => {
             <div className="text-center py-20">
               <Tags className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "Không tìm thấy danh mục" : "Chưa có danh mục nào"}
+                {searchQuery ? "No categories found" : "No categories yet"}
               </h3>
               <p className="text-gray-600 mb-6">
                 {searchQuery
-                  ? "Thử tìm kiếm với từ khóa khác"
-                  : "Thêm danh mục đầu tiên để bắt đầu"}
+                  ? "Try searching with a different keyword"
+                  : "Add the first category to get started"}
               </p>
               {!searchQuery && (
                 <Button
@@ -197,7 +197,7 @@ const CategoryPage = () => {
                   className="bg-purple-600 hover:bg-purple-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Thêm danh mục
+                  Add category
                 </Button>
               )}
             </div>
@@ -207,12 +207,12 @@ const CategoryPage = () => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold">ID</TableHead>
-                    <TableHead className="font-semibold">Tên danh mục</TableHead>
-                    <TableHead className="font-semibold">Mô tả</TableHead>
-                    <TableHead className="font-semibold">Danh mục cha</TableHead>
-                    <TableHead className="font-semibold">Danh mục con</TableHead>
+                    <TableHead className="font-semibold">Category name</TableHead>
+                    <TableHead className="font-semibold">Description</TableHead>
+                    <TableHead className="font-semibold">Parent category</TableHead>
+                    <TableHead className="font-semibold">Subcategories</TableHead>
                     <TableHead className="text-right font-semibold">
-                      Thao tác
+                      Actions
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -247,7 +247,7 @@ const CategoryPage = () => {
                       <TableCell>
                         {category.children && category.children.length > 0 ? (
                           <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-medium">
-                            {category.children.length} danh mục
+                            {category.children.length} subcategories
                           </span>
                         ) : (
                           <span className="text-gray-400 text-sm">-</span>
@@ -260,7 +260,7 @@ const CategoryPage = () => {
                             size="sm"
                             onClick={() => handleEdit(category)}
                             className="hover:bg-blue-50 hover:text-blue-600"
-                            title="Chỉnh sửa"
+                            title="Edit"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -277,7 +277,7 @@ const CategoryPage = () => {
                                 variant="ghost"
                                 size="sm"
                                 className="hover:bg-red-50 hover:text-red-600"
-                                title="Xóa"
+                                title="Delete"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -290,10 +290,10 @@ const CategoryPage = () => {
                                   </div>
                                   <div className="flex-1">
                                     <h3 className="font-semibold text-gray-900 mb-1">
-                                      Xác nhận xóa
+                                        Confirm delete
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                      Bạn có chắc chắn muốn xóa danh mục{" "}
+                                      Are you sure you want to delete the category{" "}
                                       <span className="font-semibold">
                                         "{category.name}"
                                       </span>
@@ -302,8 +302,8 @@ const CategoryPage = () => {
                                     {category.children &&
                                       category.children.length > 0 && (
                                         <p className="text-sm text-red-600 mt-2">
-                                          ⚠️ Danh mục này có{" "}
-                                          {category.children.length} danh mục con
+                                          ⚠️ This category has{" "}
+                                          {category.children.length} subcategories
                                         </p>
                                       )}
                                   </div>
@@ -317,7 +317,7 @@ const CategoryPage = () => {
                                     disabled={deleting}
                                     className="flex-1"
                                   >
-                                    Hủy
+                                    Cancel
                                   </Button>
                                   <Button
                                     size="sm"
@@ -328,10 +328,10 @@ const CategoryPage = () => {
                                     {deleting ? (
                                       <>
                                         <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                        Đang xóa...
+                                        Deleting...
                                       </>
                                     ) : (
-                                      "Xóa"
+                                      "Delete"
                                     )}
                                   </Button>
                                 </div>

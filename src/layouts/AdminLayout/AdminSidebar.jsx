@@ -66,13 +66,13 @@ const AdminSidebar = ({ onLinkClick }) => {
       color: "text-indigo-600",
       bgColor: "bg-indigo-50",
     },
-    {
-      to: "/admin/settings",
-      icon: Settings,
-      label: "Settings",
-      color: "text-gray-600",
-      bgColor: "bg-gray-50",
-    },
+    // {
+    //   to: "/admin/settings",
+    //   icon: Settings,
+    //   label: "Settings",
+    //   color: "text-gray-600",
+    //   bgColor: "bg-gray-50",
+    // },
   ];
 
   const isActive = (path, exact = false) => {

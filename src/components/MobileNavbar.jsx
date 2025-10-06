@@ -14,13 +14,21 @@ import {
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MobileNavbar = () => {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [openSheet, setOpenSheet] = useState(false);
+  const navigate = useNavigate();
 
   const handleLinkClick = () => {
     setOpenSheet(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setOpenSheet(false);
+    navigate("/");
   };
 
   const menuItems = user
@@ -69,24 +77,31 @@ const MobileNavbar = () => {
             <div className="flex-1 p-4 space-y-2 overflow-y-auto">
               {user ? (
                 <>
-                  {menuItems.map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      onClick={handleLinkClick}
-                      className="block"
-                    >
-                      <div className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-amber-50 transition-all  hover:shadow-md group border-2 border-amber-100">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg ${item.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                            <item.icon className={`h-5 w-5 ${item.color}`} />
+                  {menuItems.map((item) => {
+                    // Ẩn menu Admin nếu user không phải admin
+                    if (item.to === "/admin" && user?.role !== "admin") {
+                      return null;
+                    }
+                    
+                    return (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        onClick={handleLinkClick}
+                        className="block"
+                      >
+                        <div className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-amber-50 transition-all  hover:shadow-md group border-2 border-amber-100">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-lg ${item.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                              <item.icon className={`h-5 w-5 ${item.color}`} />
+                            </div>
+                            <span className="font-medium text-gray-800">{item.label}</span>
                           </div>
-                          <span className="font-medium text-gray-800">{item.label}</span>
+                          <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
                         </div>
-                        <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    );
+                  })}
                 </>
               ) : (
                 <>
@@ -120,7 +135,7 @@ const MobileNavbar = () => {
             {/* Footer - Logout */}
             {user && (
               <div className="p-4 border-t border-gray-200 bg-white">
-                <Link to="/logout" onClick={handleLinkClick} className="block">
+                <button onClick={handleLogout} className="block w-full">
                   <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-all group border border-red-100">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -130,7 +145,7 @@ const MobileNavbar = () => {
                     </div>
                     <ChevronRight className="h-5 w-5 text-red-400 group-hover:translate-x-1 transition-all" />
                   </div>
-                </Link>
+                </button>
               </div>
             )}
           </div>
