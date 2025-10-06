@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import AuthService from "../services/auth.service";
+import { useCartStore } from "./useCartStore";
 
 export const useAuthStore = create((set, get) => ({
   user: null,
@@ -77,6 +78,9 @@ export const useAuthStore = create((set, get) => ({
       // Chỉ xóa tokens
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      
+      // Reset cart state
+      useCartStore.getState().resetCart();
       
       set({
         user: null,

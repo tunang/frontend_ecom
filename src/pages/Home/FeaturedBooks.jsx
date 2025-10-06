@@ -10,10 +10,19 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { CarTaxiFrontIcon, ShoppingCart, ShoppingCartIcon } from "lucide-react";
 import BookCard from "../../components/BookCard";
+import { useCartStore } from "../../store/useCartStore";
+import { toast } from "sonner";
+import TestStore from "../../components/TestStore";
 
 const FeaturedBooks = () => {
   const [books, setBooks] = useState([]);
-
+  const { message, clearMessage } = useCartStore();
+  useEffect(() => {
+    if (message === "item_added") {
+      toast.success("Item added to cart");
+      clearMessage();
+    }
+  }, [message]);
   useEffect(() => {
     const fetchBooks = async () => {
       const res = await BookService.user.getBooks({ featured: true });

@@ -4,6 +4,19 @@ import CartService from "@/services/cart.service";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Trash2,
   Plus,
   Minus,
@@ -13,7 +26,8 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { toast } from "sonner";
-import useCartStore from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
+import TestStore from "../../components/TestStore";
 
 const Cart = () => {
   const {
@@ -30,9 +44,12 @@ const Cart = () => {
     message,
     removeFromCart,
     clearCart,
+    clearMessage,
   } = useCartStore();
   const navigate = useNavigate();
   const [updatingItems, setUpdatingItems] = useState(new Set());
+  const [showClearDialog, setShowClearDialog] = useState(false);
+  const [openPopovers, setOpenPopovers] = useState({});
 
   useEffect(() => {
     getCart();
@@ -55,10 +72,12 @@ const Cart = () => {
   const handleRemoveItem = async (bookId, bookTitle) => {
     console.log("Removing item:", bookId);
     await removeFromCart(bookId);
+    setOpenPopovers((prev) => ({ ...prev, [bookId]: false }));
   };
 
   const handleClearCart = async () => {
     await clearCart();
+    setShowClearDialog(false);
   };
 
   const calculateItemPrice = (item) => {
@@ -112,13 +131,21 @@ const Cart = () => {
 
   useEffect(() => {
     if (message === "item_updated") {
-      toast.success(message);
+      toast.success("Item updated");
+      clearMessage();
     }
+
+    if (message === "item_removed") {
+      toast.success("Item removed");
+      clearMessage();
+    }
+
   }, [message]);
 
 
   if (items.length === 0) {
     return (
+
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Giỏ hàng</h1>
@@ -133,7 +160,7 @@ const Cart = () => {
               </p>
               <Button
                 onClick={() => navigate("/books")}
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-amber-600 hover:bg-amber-700 hover:cursor-pointer"
               >
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 Tiếp tục mua sắm
@@ -162,8 +189,8 @@ const Cart = () => {
           </div>
           <Button
             variant="outline"
-            onClick={handleClearCart}
-            className="text-red-600 border-red-600 hover:bg-red-50"
+            onClick={() => setShowClearDialog(true)}
+            className="text-red-600 border-red-600 hover:bg-red-50 hover:cursor-pointer"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Xóa tất cả
@@ -184,7 +211,7 @@ const Cart = () => {
                     className="w-5 h-5 rounded border-gray-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
                   />
                   <span className="font-semibold text-gray-900">
-                    Chọn tất cả ({items.length} sản phẩm)
+                    Select all ({items.length} items)
                   </span>
                 </label>
               </CardContent>
@@ -220,16 +247,14 @@ const Cart = () => {
                         <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden">
                           <img
                             src={
-                              book.cover_image_url
-                                ? `${import.meta.env.VITE_API_IMAGE_URL}${
-                                    book.cover_image_url
-                                  }`
-                                : "https://via.placeholder.com/150"
+                              `${import.meta.env.VITE_API_IMAGE_URL}${
+                                book.cover_image_url
+                              }`
                             }
                             alt={book.title}
                             className="w-full h-full object-cover hover:scale-105 transition-transform"
                             onError={(e) => {
-                              e.target.src = "https://via.placeholder.com/150";
+                              e.target.src = "https://placehold.co/150?text=X&font=roboto";
                             }}
                           />
                         </div>
@@ -313,15 +338,62 @@ const Cart = () => {
                             </span>
                           </div>
 
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleRemoveItem(book.id, book.title)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          <Popover
+                            open={openPopovers[book.id] || false}
+                            onOpenChange={(open) =>
+                              setOpenPopovers((prev) => ({
+                                ...prev,
+                                [book.id]: open,
+                              }))
+                            }
                           >
-                            <Trash2 className="h-4 w-4 mr-1" />
-                            Xóa
-                          </Button>
+                            <PopoverTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-4 w-4 mr-1" />
+                                Xóa
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-80">
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="font-semibold text-gray-900 mb-1">
+                                    Xác nhận xóa
+                                  </h4>
+                                  <p className="text-sm text-gray-600">
+                                    Bạn có chắc chắn muốn xóa "{book.title}" khỏi giỏ
+                                    hàng?
+                                  </p>
+                                </div>
+                                <div className="flex gap-2 justify-end">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() =>
+                                      setOpenPopovers((prev) => ({
+                                        ...prev,
+                                        [book.id]: false,
+                                      }))
+                                    }
+                                  >
+                                    Hủy
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() =>
+                                      handleRemoveItem(book.id, book.title)
+                                    }
+                                  >
+                                    Xóa
+                                  </Button>
+                                </div>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         </div>
                       </div>
 
@@ -343,22 +415,22 @@ const Cart = () => {
             <Card className="sticky top-4">
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Tổng đơn hàng
+                  Total order
                 </h2>
 
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-gray-700">
-                    <span>Tạm tính:</span>
+                    <span>Subtotal:</span>
                     <span>${calculateSubtotal().toFixed(2)}</span>
                   </div>
                   {calculateTotalDiscount() > 0 && (
                     <div className="flex justify-between text-green-600">
-                      <span>Giảm giá:</span>
+                      <span>Discount:</span>
                       <span>-${calculateTotalDiscount().toFixed(2)}</span>
                     </div>
                   )}
                   <div className="border-t pt-3 flex justify-between text-xl font-bold text-gray-900">
-                    <span>Tổng cộng:</span>
+                    <span>Total:</span>
                     <span className="text-amber-600">
                       ${calculateTotal().toFixed(2)}
                     </span>
@@ -370,13 +442,13 @@ const Cart = () => {
                   onClick={handleCheckout}
                   disabled={selectedItems.length === 0}
                 >
-                  Thanh toán ({selectedItems.length})
+                  Checkout ({selectedItems.length})
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
                 
                 {selectedItems.length === 0 && (
                   <p className="text-xs text-center text-red-500 mt-2">
-                    Vui lòng chọn ít nhất một sản phẩm
+                    Please select at least one item
                   </p>
                 )}
 
@@ -385,12 +457,37 @@ const Cart = () => {
                   className="w-full mt-3"
                   onClick={() => navigate("/books")}
                 >
-                  Tiếp tục mua sắm
+                  Continue shopping
                 </Button>
               </CardContent>
             </Card>
           </div>
         </div>
+
+        {/* Clear Cart Dialog */}
+        <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Xóa tất cả sản phẩm</DialogTitle>
+              <DialogDescription>
+                Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng không?
+                Hành động này không thể hoàn tác.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowClearDialog(false)}
+              >
+                Hủy
+              </Button>
+              <Button variant="destructive" onClick={handleClearCart}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Xóa tất cả
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

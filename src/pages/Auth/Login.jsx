@@ -17,9 +17,11 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
+import { useCartStore } from "@/store/useCartStore";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const {getCart} = useCartStore();
   const navigate = useNavigate();
 
   // Zustand store
@@ -44,15 +46,16 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (message === "invalid_credentials") {
-      toast.error("Email hoặc mật khẩu không hợp lệ. Vui lòng thử lại.", {
+      toast.error("Email or password is incorrect. Please try again.", {
         duration: 5000,
       });
     }
 
     if (message === "login_success") {
-      toast.success("Đăng nhập thành công", {
+      toast.success("Login successful", {
         duration: 5000,
       });
+      getCart();
       navigate("/");
     }
   }, [message]);
@@ -69,10 +72,10 @@ const LoginPage = () => {
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Chào mừng trở lại
+            Welcome back
           </h1>
           <p className="text-gray-600">
-            Đăng nhập để tiếp tục mua sắm sách yêu thích
+            Login to continue shopping for your favorite books
           </p>
         </div>
 
@@ -105,7 +108,7 @@ const LoginPage = () => {
                     to="/forgot-password"
                     className="text-sm text-amber-600 hover:text-amber-700 font-medium transition-colors"
                   >
-                    Quên mật khẩu?
+                    Forgot password?
                   </Link>
                 </div>
                 <div className="relative">
@@ -144,10 +147,10 @@ const LoginPage = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Đang đăng nhập...
+                    Logging in...
                   </>
                 ) : (
-                  "Đăng nhập"
+                  "Login"
                 )}
               </Button>
             </form>
@@ -183,12 +186,12 @@ const LoginPage = () => {
 
         {/* Register Link */}
         <p className="text-center mt-6 text-gray-600">
-          Chưa có tài khoản?{" "}
+          Don't have an account?{" "}
           <Link
             to="/register"
             className="text-amber-600 hover:text-amber-700 font-semibold transition-colors"
           >
-            Đăng ký ngay
+            Register now
           </Link>
         </p>
       </div>

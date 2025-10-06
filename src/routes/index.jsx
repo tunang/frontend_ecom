@@ -14,6 +14,7 @@ import CheckoutPage from "../pages/Checkout";
 import CheckoutSuccess from "../pages/Checkout/Success";
 import CheckoutCancel from "../pages/Checkout/Cancel";
 import OrdersPage from "../pages/Orders";
+import ProfilePage from "../pages/Profile";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard";
 import AdminBooksPage from "../pages/Admin/Books";
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "/orders",
         element: <OrdersPage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
       },
     ],
   },

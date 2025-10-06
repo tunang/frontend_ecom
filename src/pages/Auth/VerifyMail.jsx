@@ -18,8 +18,8 @@ const VerifyMailPage = () => {
 
       if (!confirmationToken) {
         setStatus("error");
-        setErrorMessage("Token xác thực không hợp lệ.");
-        toast.error("Liên kết xác thực không hợp lệ.", {
+        setErrorMessage("Verification token is invalid.");
+        toast.error("Verification link is invalid.", {
           duration: 5000,
         });
         return;
@@ -30,7 +30,7 @@ const VerifyMailPage = () => {
 
         if (response?.status?.message === "email_confirmed") {
           setStatus("success");
-          toast.success("Email đã được xác thực thành công!", {
+          toast.success("Email has been verified successfully!", {
             duration: 5000,
           });
 
@@ -47,13 +47,13 @@ const VerifyMailPage = () => {
 
         if (errorMsg === "email_confirmed_failed") {
           const errors = errorData?.errors || [];
-          setErrorMessage(errors[0] || "Email đã được xác thực trước đó.");
-          toast.error("Email đã được xác thực. Vui lòng đăng nhập.", {
+          setErrorMessage(errors[0] || "Email has been verified before.");
+          toast.error("Email has been verified. Please login.", {
             duration: 5000,
           });
         } else {
-          setErrorMessage("Xác thực email thất bại. Vui lòng thử lại.");
-          toast.error("Xác thực email thất bại.", {
+          setErrorMessage("Verification email failed. Please try again.");
+          toast.error("Verification email failed.", {
             duration: 5000,
           });
         }
@@ -76,10 +76,10 @@ const VerifyMailPage = () => {
                     <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Đang xác thực email...
+                    Verifying email...
                   </h2>
                   <p className="text-sm text-gray-600">
-                    Vui lòng đợi trong giây lát
+                    Please wait for a moment
                   </p>
                 </>
               )}
@@ -91,22 +91,22 @@ const VerifyMailPage = () => {
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Xác thực thành công!
+                    Verification successful!
                   </h2>
                   <div className="bg-green-50 border border-green-200 rounded-md p-4">
                     <Mail className="w-6 h-6 text-green-600 mx-auto mb-2" />
                     <p className="text-sm text-gray-700">
-                      Email của bạn đã được xác thực thành công.
+                      Your email has been verified successfully.
                     </p>
                   </div>
                   <p className="text-sm text-gray-600">
-                    Bạn sẽ được chuyển đến trang đăng nhập sau 3 giây...
+                    You will be redirected to the login page after 3 seconds...
                   </p>
                   <Button
                     onClick={() => navigate("/login")}
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-md transition-colors duration-200"
                   >
-                    Đăng nhập ngay
+                    Login now
                   </Button>
                 </>
               )}
@@ -118,7 +118,7 @@ const VerifyMailPage = () => {
                     <XCircle className="w-8 h-8 text-red-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Xác thực thất bại
+                    Verification failed
                   </h2>
                   <div className="bg-red-50 border border-red-200 rounded-md p-4">
                     <p className="text-sm text-red-700">
@@ -130,14 +130,14 @@ const VerifyMailPage = () => {
                       onClick={() => navigate("/login")}
                       className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-md transition-colors duration-200"
                     >
-                      Đến trang đăng nhập
+                      Back to login
                     </Button>
                     <Button
                       onClick={() => navigate("/register")}
                       variant="outline"
                       className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-2.5 rounded-md transition-colors duration-200"
                     >
-                      Đăng ký tài khoản mới
+                      Register new account
                     </Button>
                   </div>
                 </>

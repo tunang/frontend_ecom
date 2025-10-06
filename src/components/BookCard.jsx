@@ -22,7 +22,31 @@ import {
   ShoppingCartIcon,
   Loader2,
 } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
+import { useCartStore } from "@/store/useCartStore";
+
 const BookCard = ({book}) => {
+  const { addToCart, message } = useCartStore(); 
+  const { user } = useAuthStore();
+  const [quantity, setQuantity] = useState(1);
+  
+  const handleAddToCart = async (book) => {
+    if (!user) {
+      toast.error("Please login to add to cart", {
+        duration: 3000,
+      });
+      return;
+    }
+    
+    await addToCart({
+      book_id: book.id,
+      quantity: quantity,
+    });
+  };
+
+  
+
   return (
     <Card
       key={book.id}
@@ -36,7 +60,7 @@ const BookCard = ({book}) => {
                 book.cover_image_url
               }`}
               onError={(e) => {
-                e.target.src = "https://via.placeholder.com/150";
+                e.target.src = "https://placehold.co/150?text=X&font=roboto";
               }}
               alt={book.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -78,7 +102,7 @@ const BookCard = ({book}) => {
               </span>
             )}
           </div>
-          <button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+          <button onClick={() => handleAddToCart(book)} className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2 hover:cursor-pointer">
             <ShoppingCartIcon className="w-4 h-4" />
             Add
           </button>

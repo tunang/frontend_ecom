@@ -61,10 +61,12 @@ const OrderService = {
   // Admin endpoints
   admin: {
     // Lấy tất cả đơn hàng (admin)
-    getAllOrders: async (page = 1, perPage = 10, status = "") => {
+    getAllOrders: async (page = 1, perPage = 10, status = "", query = "", sortBy = "newest") => {
       try {
         const params = { page, per_page: perPage };
         if (status) params.status = status;
+        if (query) params.query = query;
+        if (sortBy) params.sort_by = sortBy;
         const response = await api.get("/admin/orders/get_all", { params });
         return response;
       } catch (error) {

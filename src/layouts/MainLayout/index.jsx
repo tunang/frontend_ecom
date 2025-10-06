@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import Header from "./Header";
-
+import TestStore from "../../components/TestStore";
 const MainLayout = () => {
   
   return (
@@ -25,9 +25,9 @@ const MainLayout = () => {
         <Outlet />
       </main>
 
-      <footer className="border-t bg-background">
+      <footer className="border-t bg-background mt-8">
         <div className="container mx-auto px-4 py-6 text-center text-muted-foreground">
-          <p>&copy; 2024 BookStore. Tất cả quyền được bảo lưu.</p>
+          <p>&copy; 2024 BookStore. All rights reserved.</p>
         </div>
       </footer>
     </div>

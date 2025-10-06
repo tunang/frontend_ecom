@@ -217,17 +217,15 @@ const AuthorsPage = () => {
                     <TableRow key={author.id} className="hover:bg-gray-50">
                       <TableCell className="font-medium">{author.id}</TableCell>
                       <TableCell>
-                        {author.photo ? (
                           <img
                             src={`${import.meta.env.VITE_API_IMAGE_URL}${author.photo}`}
                             alt={author.name}
+                              onError={(e) => {
+                              e.target.src =
+                                "https://placehold.co/150?text=X&font=roboto";
+                            }}
                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
                           />
-                        ) : (
-                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                            <User className="w-6 h-6 text-blue-600" />
-                          </div>
-                        )}
                       </TableCell>
                       <TableCell>
                         <span className="font-medium text-gray-900">

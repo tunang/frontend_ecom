@@ -53,7 +53,7 @@ const OrdersPage = () => {
         setTotalCount(response.pagination?.total_count || 0);
       } catch (error) {
         console.error("Error fetching orders:", error);
-        toast.error("Không thể tải danh sách đơn hàng");
+        toast.error("Cannot load order list");
       } finally {
         setLoadingOrders(false);
       }
@@ -75,7 +75,7 @@ const OrdersPage = () => {
       }));
     } catch (error) {
       console.error("Error fetching order detail:", error);
-      toast.error("Không thể tải chi tiết đơn hàng");
+      toast.error("Cannot load order detail");
     } finally {
       setLoadingDetails((prev) => ({ ...prev, [orderId]: false }));
     }
@@ -84,7 +84,7 @@ const OrdersPage = () => {
   // Handle repay order
   const handleRepay = async (order) => {
     if (!order.stripe_session_id) {
-      toast.error("Không thể thanh toán lại đơn hàng này");
+      toast.error("Cannot repay this order");
       return;
     }
 
@@ -93,18 +93,18 @@ const OrdersPage = () => {
       const response = await OrderService.repayOrder(order.stripe_session_id);
 
       if (response.data?.payment_url) {
-        toast.success("Chuyển đến trang thanh toán...");
+        toast.success("Redirecting to payment page...");
         setTimeout(() => {
           window.location.href = response.data.payment_url;
         }, 500);
       } else {
-        toast.error("Không thể lấy link thanh toán");
+        toast.error("Cannot get payment link");
       }
     } catch (error) {
       console.error("Error repaying order:", error);
       const errorMessage =
         error.response?.data?.errors?.[0] ||
-        "Không thể thanh toán lại. Vui lòng thử lại.";
+        "Cannot repay. Please try again.";
       toast.error(errorMessage);
     } finally {
       setProcessingRepay((prev) => ({ ...prev, [order.id]: false }));
@@ -115,27 +115,27 @@ const OrdersPage = () => {
   const StatusBadge = ({ status }) => {
     const statusConfig = {
       pending: {
-        label: "Chờ xử lý",
+        label: "Pending",
         className: "bg-yellow-100 text-yellow-800 border-yellow-200",
       },
       confirmed: {
-        label: "Đã thanh toán",
+        label: "Paid",
         className: "bg-green-100 text-green-800 border-green-200",
       },
       processing: {
-        label: "Đang xử lý",
+        label: "Processing",
         className: "bg-blue-100 text-blue-800 border-blue-200",
       },
       shipped: {
-        label: "Đang giao",
+        label: "Shipping",
         className: "bg-purple-100 text-purple-800 border-purple-200",
       },
       delivered: {
-        label: "Đã giao",
+        label: "Delivered",
         className: "bg-green-100 text-green-800 border-green-200",
       },
       cancelled: {
-        label: "Đã hủy",
+        label: "Cancelled",
         className: "bg-red-100 text-red-800 border-red-200",
       },
     };
@@ -168,12 +168,12 @@ const OrdersPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Đơn hàng của tôi
+            My orders
           </h1>
           <p className="text-gray-600">
             {totalCount > 0
-              ? `Bạn có ${totalCount} đơn hàng`
-              : "Chưa có đơn hàng nào"}
+              ? `You have ${totalCount} orders`
+              : "No orders yet"}
           </p>
         </div>
 
@@ -188,13 +188,13 @@ const OrdersPage = () => {
             <CardContent>
               <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Chưa có đơn hàng nào
+                No orders yet
               </h3>
               <p className="text-gray-600 mb-6">
-                Bạn chưa đặt hàng. Hãy khám phá và mua sắm ngay!
+                You haven't placed any orders yet. Explore and shop now!
               </p>
               <Button className="bg-amber-600 hover:bg-amber-700">
-                Mua sắm ngay
+                Shop now
               </Button>
             </CardContent>
           </Card>
@@ -249,7 +249,7 @@ const OrdersPage = () => {
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                                 <ShoppingBag className="w-4 h-4" />
-                                Sản phẩm
+                                Products
                               </h4>
                               <div className="space-y-3">
                                 {orderDetails[order.id].order_items?.map(
@@ -276,7 +276,7 @@ const OrdersPage = () => {
                                           {item.book.title}
                                         </h5>
                                         <p className="text-sm text-gray-600 mt-1">
-                                          Số lượng: {item.quantity}
+                                          Quantity: {item.quantity}
                                         </p>
                                         <p className="text-sm text-amber-600 font-semibold mt-1">
                                           ${parseFloat(item.unit_price).toFixed(
@@ -298,7 +298,7 @@ const OrdersPage = () => {
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                                 <MapPin className="w-4 h-4" />
-                                Địa chỉ giao hàng
+                                Shipping address
                               </h4>
                               <div className="p-4 bg-gray-50 rounded-lg">
                                 <p className="font-medium text-gray-900">
@@ -342,12 +342,12 @@ const OrdersPage = () => {
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                                 <DollarSign className="w-4 h-4" />
-                                Chi tiết thanh toán
+                                Payment details
                               </h4>
                               <div className="p-4 bg-gray-50 rounded-lg space-y-2">
                                 <div className="flex justify-between text-sm">
                                   <span className="text-gray-600">
-                                    Tạm tính
+                                    Subtotal
                                   </span>
                                   <span className="font-medium">
                                     $
@@ -357,7 +357,7 @@ const OrdersPage = () => {
                                   </span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                  <span className="text-gray-600">Thuế</span>
+                                  <span className="text-gray-600">Tax</span>
                                   <span className="font-medium">
                                     $
                                     {parseFloat(
@@ -367,7 +367,7 @@ const OrdersPage = () => {
                                 </div>
                                 <div className="flex justify-between text-sm">
                                   <span className="text-gray-600">
-                                    Phí vận chuyển
+                                    Shipping fee
                                   </span>
                                   <span className="font-medium">
                                     $
@@ -378,7 +378,7 @@ const OrdersPage = () => {
                                 </div>
                                 <div className="border-t pt-2 flex justify-between">
                                   <span className="font-semibold text-gray-900">
-                                    Tổng cộng
+                                      Total
                                   </span>
                                   <span className="font-bold text-amber-600 text-lg">
                                     $
@@ -402,12 +402,12 @@ const OrdersPage = () => {
                                     {processingRepay[order.id] ? (
                                       <>
                                         <Loader2 className="w-4 h-4 animate-spin" />
-                                        Đang xử lý...
+                                        Processing...
                                       </>
                                     ) : (
                                       <>
                                         <CreditCard className="w-4 h-4" />
-                                        Thanh toán ngay
+                                        Pay now
                                       </>
                                     )}
                                   </Button>
@@ -418,13 +418,13 @@ const OrdersPage = () => {
                                     className="flex-1"
                                     onClick={() => {
                                       // TODO: Cancel order
-                                      toast.info("Chức năng đang phát triển");
+                                      toast.info("This feature is under development");
                                     }}
                                   >
-                                    Hủy đơn
+                                    Cancel order
                                   </Button>
                                   <Button className="flex-1 bg-gray-600 hover:bg-gray-700">
-                                    Liên hệ hỗ trợ
+                                    Contact support
                                   </Button>
                                 </div>
                               </div>

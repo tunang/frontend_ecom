@@ -13,7 +13,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
-import useCartStore from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
 
 const BookDetail = () => {
   const { slug } = useParams();
@@ -23,7 +23,7 @@ const BookDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const { addToCart,message } = useCartStore();
+  const { addToCart, message, clearMessage } = useCartStore();
 
   useEffect(() => {
     const fetchBookDetail = async () => {
@@ -54,12 +54,11 @@ const BookDetail = () => {
       book_id: book.id,
       quantity: quantity,
     });
+    clearMessage();
   };
 
   useEffect(() => {
-    if (message === "item_added") {
-      toast.success(message);
-    }
+    if (message === "item_added") toast.success("Item added to cart");
   }, [message]);
 
   const handleQuantityChange = (value) => {
@@ -132,13 +131,13 @@ const BookDetail = () => {
                         ? `${
                             import.meta.env.VITE_API_IMAGE_URL
                           }${selectedImage}`
-                        : "https://via.placeholder.com/600x800?text=No+Image"
+                        : "https://placehold.co/600x800?text=No+Image&font=roboto"
                     }
                     alt={book.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.src =
-                        "https://via.placeholder.com/600x800?text=No+Image";
+                        "https://placehold.co/600x800?text=No+Image&font=roboto";
                     }}
                   />
                   {book.discount_percentage > 0 && (
@@ -226,10 +225,7 @@ const BookDetail = () => {
                   )}
                 </div>
 
-                <div>
-                  <pre>{JSON.stringify(message, null, 2)}</pre>
-                </div>  
-
+         
                 {/* Stock status */}
                 <div className="mt-4 flex items-center gap-2">
                   {inStock ? (
