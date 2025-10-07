@@ -295,6 +295,7 @@ const AdminOrdersPage = () => {
               type="single"
               collapsible
               className="w-full"
+
               onValueChange={(value) => {
                 if (value) {
                   fetchOrderDetails(parseInt(value));

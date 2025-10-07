@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, ShoppingBag, Users, DollarSign, TrendingUp, Package } from "lucide-react";
+import {
+  BookOpen,
+  ShoppingBag,
+  Users,
+  DollarSign,
+  TrendingUp,
+  Package,
+} from "lucide-react";
 import { toast } from "sonner";
 import StatService from "@/services/stat.service";
+import { subscribeAdminOrdersChannel } from "../../../lib/cable/admin/order/cable";
 
 const DashboardPage = () => {
   const [stats, setStats] = useState({
@@ -11,8 +19,43 @@ const DashboardPage = () => {
     totalOutOfStock: 0,
     totalUsers: 0,
     pendingOrders: 0,
-    completedOrders: 0,
+    processingOrders: 0,
+    deliveredOrders: 0,
   });
+
+  useEffect(() => {
+    const channel = subscribeAdminOrdersChannel();
+
+    channel.received = (data) => {
+      console.log("Order event received:", data);
+
+      if (data.type === "ORDER_CREATED") {
+        toast.success("New order received!");
+
+        setStats((prev) => ({
+          ...prev,
+          totalOrders: prev.totalOrders + 1,
+          pendingOrders: prev.pendingOrders + 1,
+        }));
+      }
+
+      if (data.type === "ORDER_PROCESSING") {
+        toast.success("An order was processing!");
+
+        setStats((prev) => ({
+          ...prev,
+          pendingOrders: Math.max(prev.pendingOrders - 1, 0),
+          processingOrders: prev.processingOrders + 1,
+        }));
+      }
+
+      // Add more cases if needed
+    };
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -25,7 +68,8 @@ const DashboardPage = () => {
           totalOutOfStock: data.total_out_of_stock_books || 0,
           totalUsers: data.total_users || 0,
           pendingOrders: data.pending_orders || 0,
-          completedOrders: data.completed_orders || 0,
+          processingOrders: data.processing_orders || 0,
+          deliveredOrders: data.delivered_orders || 0,
         });
       } catch (error) {
         console.error("Error loading stats:", error);
@@ -57,9 +101,34 @@ const DashboardPage = () => {
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
-    { title: "Out of stock", value: stats.totalOutOfStock, icon: Package, color: "text-red-600", bgColor: "bg-red-50" },
-    { title: "Pending orders", value: stats.pendingOrders, icon: Package, color: "text-yellow-600", bgColor: "bg-yellow-50" },
-    { title: "Completed orders", value: stats.completedOrders, icon: Package, color: "text-emerald-600", bgColor: "bg-emerald-50" },
+    {
+      title: "Out of stock",
+      value: stats.totalOutOfStock,
+      icon: Package,
+      color: "text-red-600",
+      bgColor: "bg-red-50",
+    },
+    {
+      title: "Pending orders",
+      value: stats.pendingOrders,
+      icon: Package,
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50",
+    },
+    {
+      title: "Processing orders",
+      value: stats.processingOrders,
+      icon: Package,
+      color: "text-emerald-600",
+      bgColor: "bg-purple-50",
+    },
+    {
+      title: "Delivered orders",
+      value: stats.deliveredOrders,
+      icon: Package,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+    },
   ];
 
   return (
@@ -122,7 +191,7 @@ const DashboardPage = () => {
           <CardHeader className="border-b border-gray-100 bg-gray-50">
             <CardTitle className="text-lg flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-amber-600" />
-              Best selling books
+              Featured books
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -138,4 +207,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-

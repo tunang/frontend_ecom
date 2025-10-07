@@ -58,10 +58,10 @@ const Cart = () => {
 
 
   const handleUpdateQuantity = async (bookId, newQuantity, stockQuantity) => {
-    if (newQuantity < 1 || newQuantity > stockQuantity) {
-      toast.error(`Số lượng phải từ 1 đến ${stockQuantity}`);
-      return;
-    }
+    // if (newQuantity < 1 || newQuantity > stockQuantity) {
+    //   toast.error(`Số lượng phải từ 1 đến ${stockQuantity}`);
+    //   return;
+    // }
 
     await updateCartItem({
       book_id: bookId,

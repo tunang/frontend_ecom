@@ -17,9 +17,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Users, Loader2, Search, Shield } from "lucide-react";
+import { Users, Loader2, Search, Shield, Eye } from "lucide-react";
 import { toast } from "sonner";
 import UserService from "@/services/user.service";
+import UserDetailDialog from "./UserDetailDialog";
+
+import { Button } from "@/components/ui/button";
 
 const AdminUsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -28,6 +31,8 @@ const AdminUsersPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const perPage = 10;
 
   useEffect(() => {
@@ -57,6 +62,16 @@ const AdminUsersPage = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleViewDetails = (user) => {
+    setSelectedUser(user);
+    setDetailDialogOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailDialogOpen(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -110,7 +125,8 @@ const AdminUsersPage = () => {
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
                     <TableHead className="font-semibold">Name</TableHead>
                     <TableHead className="font-semibold">Email</TableHead>
-                    <TableHead className="font-semibold w-[140px]">Vai trò</TableHead>
+                    <TableHead className="font-semibold w-[140px]">Role</TableHead>
+                    <TableHead className="text-right font-semibold w-[120px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -134,6 +150,17 @@ const AdminUsersPage = () => {
                           <Shield className="w-3 h-3" />
                             {u.role === "admin" ? "Admin" : "User"}
                         </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleViewDetails(u)}
+                          className="hover:bg-blue-50 hover:text-blue-600"
+                          title="View Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -207,6 +234,14 @@ const AdminUsersPage = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* User Detail Dialog */}
+      <UserDetailDialog
+        open={detailDialogOpen}
+        onClose={handleCloseDetails}
+        user={selectedUser}
+        
+      />
     </div>
   );
 };
