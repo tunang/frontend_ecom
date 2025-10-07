@@ -75,6 +75,29 @@ const OrderService = {
       }
     },
 
+    getUserOrders: async (userId, page = 1, perPage = 10) => {  
+      try {
+        const response = await api.get(`/admin/orders/${userId}`, { params: { page, per_page: perPage } });
+        return response;
+      } catch (error) {
+        console.error("Error fetching user orders:", error);
+        throw error;
+      }
+    },
+
+    // Lấy đơn hàng của user cụ thể
+    getOrdersOfUser: async (userId, page = 1, perPage = 10) => {
+      try {
+        const response = await api.get(`/admin/orders/get_orders_of_user/${userId}`, { 
+          params: { page, per_page: perPage } 
+        });
+        return response;
+      } catch (error) {
+        console.error("Error fetching orders of user:", error);
+        throw error;
+      }
+    },
+
     // Cập nhật trạng thái đơn hàng
     updateOrderStatus: async (id, status) => {
       try {

@@ -202,10 +202,11 @@ const OrdersPage = () => {
           <>
             {/* Orders Accordion */}
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-6 ">
                 <Accordion
                   type="single"
                   collapsible
+                  className="hover:cursor-pointer"
                   onValueChange={(value) => {
                     if (value) {
                       fetchOrderDetail(parseInt(value));
