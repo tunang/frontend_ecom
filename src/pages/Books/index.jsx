@@ -23,6 +23,8 @@ import {
   Loader2,
 } from "lucide-react";
 import BookCard from "../../components/BookCard";
+import { toast } from "sonner";
+import { useCartStore } from "../../store/useCartStore";
 
 const BooksPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +33,7 @@ const BooksPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-
+  const { message, clearMessage } = useCartStore();
   // Filter states
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("query") || ""
@@ -60,14 +62,24 @@ const BooksPage = () => {
     "Fantasy",
     "Self-Help",
   ];
+  useEffect(() => {
+    if (message === "item_added") {
+      toast.success("Item added to cart");
+      clearMessage();
+    }
 
+    if (message === "not_enough_stock") {
+      toast.error("Not enough stock");
+      clearMessage();
+    }
+  }, [message]);
   const sortOptions = [
-    { value: "", label: "Mặc định" },
-    { value: "price_asc", label: "Giá: Thấp → Cao" },
-    { value: "price_desc", label: "Giá: Cao → Thấp" },
-    { value: "title_asc", label: "Tên: A → Z" },
-    { value: "title_desc", label: "Tên: Z → A" },
-    { value: "newest", label: "Mới nhất" },
+    { value: "", label: "Default" },
+    { value: "price_asc", label: "Price: Low → High" },
+    { value: "price_desc", label: "Price: High → Low" },
+    { value: "title_asc", label: "Title: A → Z" },
+    { value: "title_desc", label: "Title: Z → A" },
+    { value: "newest", label: "Newest" },
   ];
 
   // Fetch books
@@ -190,7 +202,7 @@ const BooksPage = () => {
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
                     <Filter className="w-5 h-5" />
-                    Bộ lọc
+                    Filters
                   </h3>
                   {hasActiveFilters && (
                     <Button
@@ -199,7 +211,7 @@ const BooksPage = () => {
                       onClick={handleClearFilters}
                       className="text-amber-600 hover:text-amber-700"
                     >
-                      Xóa hết
+                      Clear all
                     </Button>
                   )}
                 </div>
@@ -207,7 +219,7 @@ const BooksPage = () => {
                 {/* Category Filter */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-gray-700">
-                    Danh mục
+                    Category
                   </Label>
                   <select
                     value={selectedCategory}
@@ -217,7 +229,7 @@ const BooksPage = () => {
                     }}
                     className="w-full h-9 px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   >
-                    <option value="">Tất cả danh mục</option>
+                    <option value="">All categories</option>
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
                         {cat}
@@ -229,12 +241,12 @@ const BooksPage = () => {
                 {/* Price Range Filter */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-gray-700">
-                    Khoảng giá ($)
+                    Price range ($)
                   </Label>
                   <div className="flex gap-2">
                     <Input
                       type="number"
-                      placeholder="Từ"
+                      placeholder="From"
                       value={minPrice}
                       onChange={(e) => {
                         setMinPrice(e.target.value);
@@ -245,7 +257,7 @@ const BooksPage = () => {
                     />
                     <Input
                       type="number"
-                      placeholder="Đến"
+                      placeholder="To"
                       value={maxPrice}
                       onChange={(e) => {
                         setMaxPrice(e.target.value);
@@ -260,7 +272,7 @@ const BooksPage = () => {
                 {/* Sort Filter */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-gray-700">
-                    Sắp xếp
+                    Sort
                   </Label>
                   <select
                     value={sortBy}
@@ -282,7 +294,7 @@ const BooksPage = () => {
                 {hasActiveFilters && (
                   <div className="pt-4 border-t space-y-2">
                     <p className="text-xs font-semibold text-gray-600 uppercase">
-                      Bộ lọc đang áp dụng
+                      Filters applied
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {searchQuery && (
@@ -337,7 +349,7 @@ const BooksPage = () => {
             ) : books.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500 text-lg">
-                  Không tìm thấy sản phẩm nào
+                  No products found
                 </p>
                 {hasActiveFilters && (
                   <Button
@@ -345,7 +357,7 @@ const BooksPage = () => {
                     variant="outline"
                     className="mt-4"
                   >
-                    Xóa bộ lọc
+                    Clear filters
                   </Button>
                 )}
               </div>
@@ -363,7 +375,7 @@ const BooksPage = () => {
                   <div className="mt-8 space-y-4">
                     {/* Pagination Info */}
                     <div className="text-center text-sm text-gray-600">
-                      Hiển thị{" "}
+                      Displaying{" "}
                       <span className="font-semibold text-gray-900">
                         {(currentPage - 1) * perPage + 1}
                       </span>{" "}
@@ -371,11 +383,11 @@ const BooksPage = () => {
                       <span className="font-semibold text-gray-900">
                         {Math.min(currentPage * perPage, totalItems)}
                       </span>{" "}
-                      trong tổng số{" "}
+                      out of{" "}
                       <span className="font-semibold text-gray-900">
                         {totalItems}
                       </span>{" "}
-                      sản phẩm
+                      products
                     </div>
 
                     {/* Pagination Controls */}

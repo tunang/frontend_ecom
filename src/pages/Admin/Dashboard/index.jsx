@@ -19,7 +19,7 @@ const DashboardPage = () => {
     totalOutOfStock: 0,
     totalUsers: 0,
     pendingOrders: 0,
-    processingOrders: 0,
+    confirmedOrders: 0,
     deliveredOrders: 0,
   });
 
@@ -45,7 +45,7 @@ const DashboardPage = () => {
         setStats((prev) => ({
           ...prev,
           pendingOrders: Math.max(prev.pendingOrders - 1, 0),
-          processingOrders: prev.processingOrders + 1,
+          confirmedOrders: prev.confirmedOrders + 1,
         }));
       }
 
@@ -68,7 +68,7 @@ const DashboardPage = () => {
           totalOutOfStock: data.total_out_of_stock_books || 0,
           totalUsers: data.total_users || 0,
           pendingOrders: data.pending_orders || 0,
-          processingOrders: data.processing_orders || 0,
+          confirmedOrders: data.confirmed_orders || 0,
           deliveredOrders: data.delivered_orders || 0,
         });
       } catch (error) {
@@ -116,8 +116,8 @@ const DashboardPage = () => {
       bgColor: "bg-yellow-50",
     },
     {
-      title: "Processing orders",
-      value: stats.processingOrders,
+      title: "Confirmed orders",
+      value: stats.confirmedOrders,
       icon: Package,
       color: "text-emerald-600",
       bgColor: "bg-purple-50",

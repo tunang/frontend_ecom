@@ -46,8 +46,8 @@ export const useCartStore = create((set, get) => ({
         set({ items: newItems, message: response.status.message });
       }
     } catch (error) {
-      console.error("Add to cart error:", error);
-      set({ message: error.message });
+      console.error("Add to cart error:", error.response.data.status.message);
+      set({ message: error.response.data.status.message });
     } finally {
       set({ isLoading: false });
     }

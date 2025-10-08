@@ -50,7 +50,7 @@ const Header = () => {
             </div>
             <div className="hidden sm:flex flex-col">
               <span className="text-lg sm:text-xl font-bold text-amber-700 group-hover:text-amber-800 transition-colors">
-                Sahafa
+                  Demo
               </span>
               {/* <span className="text-xs text-amber-600 font-medium hidden md:block">
                 The world of books in your hand

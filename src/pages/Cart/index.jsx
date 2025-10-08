@@ -153,17 +153,17 @@ const Cart = () => {
             <CardContent className="flex flex-col items-center justify-center py-16">
               <ShoppingCart className="h-24 w-24 text-gray-300 mb-4" />
               <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-                Giỏ hàng trống
+                Cart is empty
               </h2>
               <p className="text-gray-500 mb-6">
-                Bạn chưa có sản phẩm nào trong giỏ hàng
+                You have no products in your cart
               </p>
               <Button
                 onClick={() => navigate("/books")}
                 className="bg-amber-600 hover:bg-amber-700 hover:cursor-pointer"
               >
                 <ShoppingBag className="h-5 w-5 mr-2" />
-                Tiếp tục mua sắm
+                Continue shopping
               </Button>
             </CardContent>
           </Card>

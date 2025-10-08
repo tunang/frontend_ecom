@@ -8,13 +8,12 @@ createRoot(document.getElementById("root")).render(
   <>
     <App />
     <Toaster
-      position="bottom-left"
+      position="top-center"
       richColors={true}
-      expand={true}
-      closeButton
       toastOptions={{
         duration: 4000,
         style: {
+          marginTop: "60px",
           fontSize: "14px",
           fontWeight: "500",
         },

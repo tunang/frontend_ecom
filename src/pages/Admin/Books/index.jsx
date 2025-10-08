@@ -271,7 +271,7 @@ const AdminBooksPage = () => {
                           </div>
                           {book.discount_percentage > 0 && (
                             <div className="text-xs text-green-600">
-                              Giảm {book.discount_percentage}% = {formatCurrency(
+                              Discount {book.discount_percentage}% = {formatCurrency(
                                 calculateDiscountedPrice(book.price, book.discount_percentage)
                               )}
                             </div>

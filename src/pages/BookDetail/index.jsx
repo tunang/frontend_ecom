@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCartStore } from "@/store/useCartStore";
+import TestStore from "../../components/TestStore";
 
 const BookDetail = () => {
   const { slug } = useParams();
@@ -37,8 +38,8 @@ const BookDetail = () => {
           setSelectedImage(response.data.cover_image_url);
         }
       } catch (error) {
-        console.error("Lỗi khi tải chi tiết sách:", error);
-        toast.error("Không thể tải thông tin sách");
+        console.error("Error loading book detail: ", error);
+        toast.error("Cannot load book detail");
         navigate("/books");
       } finally {
         setIsLoading(false);
@@ -58,7 +59,13 @@ const BookDetail = () => {
   };
 
   useEffect(() => {
-    if (message === "item_added") toast.success("Item added to cart");
+    if (message === "item_added") {
+      toast.success("Item added to cart");
+    }
+
+    if (message === "not_enough_stock") {
+      toast.error("Not enough stock");
+    }
   }, [message]);
 
   const handleQuantityChange = (value) => {
@@ -78,7 +85,7 @@ const BookDetail = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-amber-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Đang tải...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -88,12 +95,12 @@ const BookDetail = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p className="text-xl text-gray-600">Không tìm thấy sách</p>
+          <p className="text-xl text-gray-600">Book not found</p>
           <Button
             onClick={() => navigate("/books")}
             className="mt-4 bg-amber-600 hover:bg-amber-700"
           >
-            Quay lại danh sách
+            Back to list
           </Button>
         </div>
       </div>
@@ -116,7 +123,7 @@ const BookDetail = () => {
           className="mb-6 hover:bg-amber-50"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Quay lại
+          Back
         </Button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -232,13 +239,13 @@ const BookDetail = () => {
                     <>
                       <PackageCheck className="h-5 w-5 text-green-600" />
                       <span className="text-green-600 font-medium">
-                        Còn hàng ({book.stock_quantity} cuốn)
+                        In stock ({book.stock_quantity} books)
                       </span>
                     </>
                   ) : (
                     <>
                       <PackageX className="h-5 w-5 text-red-600" />
-                      <span className="text-red-600 font-medium">Hết hàng</span>
+                      <span className="text-red-600 font-medium">Out of stock</span>
                     </>
                   )}
                 </div>
@@ -286,7 +293,7 @@ const BookDetail = () => {
                     className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-6 text-lg font-semibold hover:cursor-pointer"
                   >
                     <ShoppingCart className="h-5 w-5 mr-2" />
-                    Thêm vào giỏ hàng
+                    Add to cart
                   </Button>
                   {/* <Button
                     variant="outline"
@@ -303,7 +310,7 @@ const BookDetail = () => {
               <Card>
                 <CardContent className="p-6">
                   <h2 className="text-xl font-bold text-gray-900 mb-3">
-                    Mô tả sản phẩm
+                    Product description
                   </h2>
                   <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                     {book.description}
@@ -316,7 +323,7 @@ const BookDetail = () => {
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Thông tin chi tiết
+                  Detailed information
                 </h2>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between py-2 border-b border-gray-200">
@@ -331,14 +338,14 @@ const BookDetail = () => {
                   </div>
                   {book.featured && (
                     <div className="flex justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Nổi bật:</span>
-                      <span className="font-medium text-amber-600">Có</span>
+                      <span className="text-gray-600">Featured:</span>
+                      <span className="font-medium text-amber-600">Yes</span>
                     </div>
                   )}
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Ngày tạo:</span>
+                    <span className="text-gray-600">Created at:</span>
                     <span className="font-medium text-gray-900">
-                      {new Date(book.created_at).toLocaleDateString("vi-VN")}
+                      {new Date(book.created_at).toLocaleDateString("en-US")}
                     </span>
                   </div>
                 </div>

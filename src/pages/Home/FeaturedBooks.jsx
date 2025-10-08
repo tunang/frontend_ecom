@@ -22,6 +22,11 @@ const FeaturedBooks = () => {
       toast.success("Item added to cart");
       clearMessage();
     }
+
+    if (message === "not_enough_stock") {
+      toast.error("Not enough stock");
+      clearMessage();
+    }
   }, [message]);
   useEffect(() => {
     const fetchBooks = async () => {
@@ -33,7 +38,7 @@ const FeaturedBooks = () => {
   }, []);
   return (
     <div className="flex flex-col items-center justify-center mt-10">
-      <h1 className="text-2xl font-bold text-amber-600">Sách đáng chú ý</h1>
+      <h1 className="text-2xl font-bold text-amber-600">Featured Books</h1>
 
       <div className="w-full">
         <Carousel
