@@ -72,7 +72,7 @@ const CheckoutPage = () => {
   // Check if cart is empty
   useEffect(() => {
     if (selectedCartItems.length === 0) {
-      toast.error("Giỏ hàng trống. Vui lòng chọn sản phẩm.");
+      toast.error("Cart is empty. Please select products.");
       setTimeout(() => {
         navigate("/cart");
       }, 1500);
@@ -97,7 +97,7 @@ const CheckoutPage = () => {
         }
       } catch (error) {
         console.error("Error fetching addresses:", error);
-        toast.error("Không thể tải danh sách địa chỉ");
+        toast.error("Cannot load addresses");
       } finally {
         setIsLoadingAddresses(false);
       }
@@ -108,7 +108,7 @@ const CheckoutPage = () => {
 
   const validateForm = () => {
     if (!selectedAddressId) {
-      toast.error("Vui lòng chọn địa chỉ giao hàng");
+      toast.error("Please select a shipping address");
       return false;
     }
     return true;
@@ -135,13 +135,13 @@ const CheckoutPage = () => {
 
       // If payment_url exists, redirect to Stripe payment
       if (response.payment_url) {
-        toast.success("Chuyển đến trang thanh toán...");
+        toast.success("Redirecting to payment page...");
         setTimeout(() => {
           window.location.href = response.payment_url;
         }, 500);
       } else {
         // For COD or other non-Stripe payments
-        toast.success("Đặt hàng thành công!");
+        toast.success("Order placed successfully!");
         setTimeout(() => {
           if (response.data?.id) {
             navigate(`/orders/${response.data.id}`);
@@ -165,10 +165,10 @@ const CheckoutPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Thanh toán
+            Payment
           </h1>
           <p className="text-gray-600">
-            Hoàn tất thông tin để đặt hàng
+            Complete the information to place an order
           </p>
         </div>
 
@@ -181,12 +181,12 @@ const CheckoutPage = () => {
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-amber-600" />
-                    Địa chỉ giao hàng
+                    Shipping address
                   </div>
                   <Link to="/addresses">
                     <Button variant="outline" size="sm" className="gap-2">
                       <Plus className="w-4 h-4" />
-                      Thêm địa chỉ mới
+                      Add new address
                     </Button>
                   </Link>
                 </CardTitle>
@@ -198,11 +198,11 @@ const CheckoutPage = () => {
                   </div>
                 ) : addresses.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-gray-500 mb-4">Chưa có địa chỉ nào</p>
+                    <p className="text-gray-500 mb-4">No addresses</p>
                     <Link to="/addresses">
                       <Button className="bg-amber-600 hover:bg-amber-700">
                         <Plus className="w-4 h-4 mr-2" />
-                        Thêm địa chỉ mới
+                        Add new address
                       </Button>
                     </Link>
                   </div>
@@ -225,14 +225,14 @@ const CheckoutPage = () => {
                             </h4>
                             {address.is_default && (
                               <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
-                                Mặc định
+                                Default
                               </span>
                             )}
                           </div>
                           <div className="space-y-1">
                            
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">Địa chỉ:</span>{" "}
+                              <span className="font-medium">Address:</span>{" "}
                               {[
                                 address.address_line || address.street_address || address.address,
                                 address.ward || address.ward_name,
@@ -244,11 +244,11 @@ const CheckoutPage = () => {
                                 .join(", ")}
                             </p>
                             <p className="text-sm text-gray-600">
-                              <span className="font-medium">SĐT:</span> {address.phone_number || address.phone}
+                              <span className="font-medium">Phone:</span> {address.phone_number || address.phone}
                             </p>
                             {address.postal_code && (
                               <p className="text-sm text-gray-600">
-                                <span className="font-medium">Mã bưu điện:</span> {address.postal_code}
+                                      <span className="font-medium">Postal code:</span> {address.postal_code}
                               </p>
                             )}
                           </div>
@@ -267,11 +267,11 @@ const CheckoutPage = () => {
 
                 {/* Order Note */}
                 <div className="space-y-2 pt-4 border-t">
-                  <Label htmlFor="orderNote">Ghi chú đơn hàng (Tùy chọn)</Label>
+                  <Label htmlFor="orderNote">Order note (optional)</Label>
                   <textarea
                     id="orderNote"
                     rows="3"
-                    placeholder="Ghi chú cho người bán..."
+                    placeholder="Note for the seller..."
                     value={orderNote}
                     onChange={(e) => setOrderNote(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -285,7 +285,7 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Wallet className="w-5 h-5 text-amber-600" />
-                  Phương thức thanh toán
+                  Payment method
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -338,7 +338,7 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Package className="w-5 h-5 text-amber-600" />
-                  Đơn hàng
+                  Order
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -380,11 +380,11 @@ const CheckoutPage = () => {
 
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Tạm tính</span>
+                    <span className="text-gray-600">Subtotal</span>
                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Phí vận chuyển</span>
+                    <span className="text-gray-600">Shipping fee</span>
                     <span className="font-medium">${shippingFee.toFixed(2)}</span>
                   </div>
                 </div>
@@ -392,7 +392,7 @@ const CheckoutPage = () => {
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">
-                      Tổng cộng
+                      Total
                     </span>
                     <span className="text-2xl font-bold text-amber-600">
                       ${total.toFixed(2)}
@@ -408,20 +408,20 @@ const CheckoutPage = () => {
                   {isProcessing ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Đang xử lý...
+                      Processing...
                     </>
                   ) : (
                     <>
-                      Đặt hàng
+                      Place order
                       <ChevronRight className="w-5 h-5" />
                     </>
                   )}
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  Bằng cách đặt hàng, bạn đồng ý với{" "}
+                  By placing an order, you agree to our{" "}
                   <a href="/terms" className="text-amber-600 hover:underline">
-                    điều khoản dịch vụ
+                    terms of service
                   </a>
                 </p>
               </CardContent>

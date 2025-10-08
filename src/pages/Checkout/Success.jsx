@@ -27,7 +27,7 @@ const CheckoutSuccess = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-amber-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Đang xác nhận thanh toán...</p>
+          <p className="text-gray-600">Verifying payment...</p>
         </div>
       </div>
     );
@@ -43,10 +43,10 @@ const CheckoutSuccess = () => {
               <CheckCircle className="w-12 h-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Đặt hàng thành công!
+              Order successful!
             </h1>
             <p className="text-gray-600">
-              Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.
+              Thank you for your purchase. Your order is being processed.
             </p>
           </div>
 
@@ -57,18 +57,18 @@ const CheckoutSuccess = () => {
                 <Package className="w-6 h-6 text-amber-600 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    Thông tin đơn hàng
+                    Order information
                   </h3>
                   <div className="space-y-1 text-sm text-gray-600">
                     <p>
-                      Chúng tôi đã gửi email xác nhận đến địa chỉ email của bạn.
+                      We have sent a confirmation email to your email address.
                     </p>
                     <p>
-                      Đơn hàng sẽ được giao trong vòng 3-5 ngày làm việc.
+                      Your order will be delivered within 3-5 working days.
                     </p>
                     {sessionId && (
                       <p className="text-xs mt-2 text-gray-500">
-                        Session ID: {sessionId}
+                          Session ID: {sessionId}
                       </p>
                     )}
                   </div>
@@ -78,19 +78,19 @@ const CheckoutSuccess = () => {
 
             {/* Next Steps */}
             <div className="space-y-3">
-              <h3 className="font-semibold text-gray-900">Bước tiếp theo:</h3>
+              <h3 className="font-semibold text-gray-900">Next steps:</h3>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-amber-600">✓</span>
-                  <span>Bạn sẽ nhận được email xác nhận đơn hàng</span>
+                  <span>You will receive a confirmation email</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-amber-600">✓</span>
-                  <span>Đơn hàng sẽ được đóng gói và vận chuyển</span>
+                  <span>Your order will be packaged and shipped</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-amber-600">✓</span>
-                  <span>Bạn có thể theo dõi tình trạng đơn hàng trong tài khoản</span>
+                  <span>You can track your order status in your account</span>
                 </li>
               </ul>
             </div>
@@ -99,13 +99,13 @@ const CheckoutSuccess = () => {
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Link to="/orders" className="flex-1">
                 <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">
-                  Xem đơn hàng của tôi
+                  View my orders
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
               <Link to="/books" className="flex-1">
                 <Button variant="outline" className="w-full">
-                  Tiếp tục mua sắm
+                  Continue shopping
                 </Button>
               </Link>
             </div>
@@ -113,9 +113,9 @@ const CheckoutSuccess = () => {
             {/* Support Info */}
             <div className="text-center pt-4 border-t">
               <p className="text-sm text-gray-600">
-                Cần hỗ trợ?{" "}
+                Need help?{" "}
                 <Link to="/support" className="text-amber-600 hover:text-amber-700 font-medium">
-                  Liên hệ chúng tôi
+                  Contact us
                 </Link>
               </p>
             </div>

@@ -14,10 +14,10 @@ const CheckoutCancel = () => {
               <XCircle className="w-12 h-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Thanh toán bị hủy
+              Payment cancelled
             </h1>
             <p className="text-gray-600">
-              Đơn hàng của bạn chưa được hoàn tất
+              Your order has not been completed
             </p>
           </div>
 
@@ -28,7 +28,7 @@ const CheckoutCancel = () => {
                 <HelpCircle className="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    Chuyện gì đã xảy ra?
+                    What happened?
                   </h3>
                   <p className="text-sm text-gray-600">
                     Bạn đã hủy quá trình thanh toán hoặc quá trình thanh toán đã bị gián đoạn.
@@ -40,14 +40,14 @@ const CheckoutCancel = () => {
 
             {/* What's Next */}
             <div className="space-y-3">
-              <h3 className="font-semibold text-gray-900">Bạn có thể:</h3>
+              <h3 className="font-semibold text-gray-900">You can:</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <RefreshCw className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900 text-sm">Thử lại thanh toán</h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      Sản phẩm vẫn còn trong giỏ hàng của bạn
+                      The product is still in your cart
                     </p>
                   </div>
                 </div>
@@ -57,7 +57,7 @@ const CheckoutCancel = () => {
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900 text-sm">Tiếp tục mua sắm</h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      Khám phá thêm sản phẩm và quay lại sau
+                      Explore more products and come back later
                     </p>
                   </div>
                 </div>
@@ -69,13 +69,13 @@ const CheckoutCancel = () => {
               <Link to="/cart" className="flex-1">
                 <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Quay lại giỏ hàng
+                  Back to cart
                 </Button>
               </Link>
               <Link to="/books" className="flex-1">
                 <Button variant="outline" className="w-full">
                   <ShoppingBag className="w-4 h-4 mr-2" />
-                  Tiếp tục mua sắm
+                  Continue shopping
                 </Button>
               </Link>
             </div>
@@ -83,23 +83,23 @@ const CheckoutCancel = () => {
             {/* Support Info */}
             <div className="text-center pt-4 border-t">
               <p className="text-sm text-gray-600 mb-2">
-                Gặp vấn đề với thanh toán?
+                Having trouble with payment?
               </p>
               <Link to="/support" className="text-amber-600 hover:text-amber-700 font-medium text-sm">
-                Liên hệ bộ phận hỗ trợ →
+                Contact support →
               </Link>
             </div>
 
             {/* Common Issues */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="text-sm font-semibold text-gray-900 mb-2">
-                Các vấn đề thường gặp:
+                Common issues:
               </h4>
               <ul className="text-xs text-gray-600 space-y-1">
-                <li>• Thẻ thanh toán không đủ số dư</li>
-                <li>• Thông tin thẻ không chính xác</li>
-                <li>• Phiên thanh toán hết hạn</li>
-                <li>• Kết nối internet bị gián đoạn</li>
+                <li>• Payment card has insufficient balance</li>
+                <li>• Payment card information is incorrect</li>
+                <li>• Payment session expired</li>
+                <li>• Internet connection interrupted</li>
               </ul>
             </div>
           </CardContent>

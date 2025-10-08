@@ -256,6 +256,9 @@ const OrdersPage = () => {
                                 {orderDetails[order.id].order_items?.map(
                                   (item) => (
                                     <div
+                                      onClick={() => {
+                                        window.open(`/books/${item.book.slug}`, '_blank');
+                                      }}
                                       key={item.id}
                                       className="flex gap-4 p-3 bg-gray-50 rounded-lg"
                                     >

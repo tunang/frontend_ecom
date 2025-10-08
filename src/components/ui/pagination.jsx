@@ -66,7 +66,7 @@ function PaginationPrevious({
       className={cn("gap-1 pl-2.5", className)}
       {...props}>
       <ChevronLeft className="h-4 w-4" />
-      <span>Trước</span>
+      <span>Previous</span>
     </PaginationLink>
   );
 }
@@ -82,7 +82,7 @@ function PaginationNext({
       size="default"
       className={cn("gap-1 pr-2.5", className)}
       {...props}>
-      <span>Sau</span>
+      <span>Next</span>
       <ChevronRight className="h-4 w-4" />
     </PaginationLink>
   );
