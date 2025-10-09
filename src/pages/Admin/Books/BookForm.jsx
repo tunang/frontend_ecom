@@ -367,7 +367,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                   }
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80 p-0">
+              <PopoverContent className="w-80 p-0" onWheel={(e) => e.stopPropagation()}>
                 <div className="p-3 space-y-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -380,7 +380,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                     />
                   </div>
                 </div>
-                <div className="max-h-60 overflow-y-auto overscroll-contain scrollbar-thin px-3 pb-3">
+                <div className="max-h-60 overflow-y-auto px-3 pb-3" style={{ overscrollBehavior: 'contain' }}>
                     {loadingData ? (
                       <div className="flex items-center justify-center py-4">
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -427,7 +427,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                   }
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80 p-0">
+              <PopoverContent className="w-80 p-0" onWheel={(e) => e.stopPropagation()}>
                 <div className="p-3 space-y-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -440,7 +440,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                     />
                   </div>
                 </div>
-                <div className="max-h-60 overflow-y-auto overscroll-contain scrollbar-thin px-3 pb-3">
+                <div className="max-h-60 overflow-y-auto px-3 pb-3" style={{ overscrollBehavior: 'contain' }}>
                     {loadingData ? (
                       <div className="flex items-center justify-center py-4">
                         <Loader2 className="w-5 h-5 animate-spin" />

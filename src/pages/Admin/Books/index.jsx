@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,12 +42,19 @@ import BookForm from "./BookForm";
 import TrashDialog from "./TrashDialog";
 
 const AdminBooksPage = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  // Initialize inStockFilter from URL params
+  const initialInStock = searchParams.get("in_stock");
+  
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [inStockFilter, setInStockFilter] = useState(initialInStock);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [deletePopoverOpen, setDeletePopoverOpen] = useState(null);
@@ -57,7 +65,7 @@ const AdminBooksPage = () => {
   useEffect(() => {
     fetchBooks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, inStockFilter]);
 
   const fetchBooks = async () => {
     try {
@@ -67,9 +75,13 @@ const AdminBooksPage = () => {
         per_page: perPage,
         search: searchQuery,
       };
-      const response = await BookService.admin.getBooks(
-        params
-      );
+      
+      // Add in_stock filter if it exists
+      if (inStockFilter !== null) {
+        params.in_stock = inStockFilter === "false" ? false : true;
+      }
+      
+      const response = await BookService.admin.getBooks(params);
       setBooks(response.data);
       setTotalPages(response.pagination?.total_pages || 1);
       setTotalCount(response.pagination?.total_count || 0);
@@ -164,15 +176,34 @@ const AdminBooksPage = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search books..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex items-center gap-3">
+          <div className="relative max-w-md flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search books..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          
+          {/* Filter Badge */}
+          {inStockFilter === "false" && (
+            <div className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-lg">
+              <Package className="w-4 h-4 text-red-600" />
+              <span className="text-sm font-medium text-red-700">Out of stock only</span>
+              <button
+                onClick={() => {
+                  setInStockFilter(null);
+                  navigate('/admin/books');
+                }}
+                className="ml-2 text-red-600 hover:text-red-800"
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

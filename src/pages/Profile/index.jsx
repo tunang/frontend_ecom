@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2, User, Mail, Shield } from "lucide-react";
 import { apiBase } from "@/services/api";
 import { toast } from "sonner";
+import { RoleChecker } from "@/util/RoleUtils";
 
 const ProfilePage = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -133,12 +134,10 @@ const ProfilePage = () => {
                     <p className="text-base font-semibold text-gray-900">
                       <span
                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                          userData?.role === "admin"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-blue-100 text-blue-800"
+                          RoleChecker.getRoleBadgeClass(userData?.role)
                         }`}
                       >
-                        {userData?.role === "admin" ? "Admin" : "User"}
+                        {RoleChecker.getRoleDisplayName(userData?.role)}
                       </span>
                     </p>
                   </div>

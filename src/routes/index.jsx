@@ -23,6 +23,7 @@ import AuthorsPage from "../pages/Admin/Authors";
 import AdminOrdersPage from "../pages/Admin/Orders";
 import AdminUsersPage from "../pages/Admin/Users";
 import AdminSettingsPage from "../pages/Admin/Settings";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -63,31 +64,59 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/addresses",
-        element: <Address />,
+        element: (
+          <ProtectedRoute>
+            <Address />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/checkout",
-        element: <CheckoutPage />,
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/checkout/success",
-        element: <CheckoutSuccess />,
+        element: (
+          <ProtectedRoute>
+            <CheckoutSuccess />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/checkout/cancel",
-        element: <CheckoutCancel />,
+        element: (
+          <ProtectedRoute>
+            <CheckoutCancel />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/orders",
-        element: <OrdersPage />,
+        element: (
+          <ProtectedRoute>
+            <OrdersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile",
-        element: <ProfilePage />,
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -97,31 +126,59 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <AdminDashboard />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminDashboard />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "books",
-        element: <AdminBooksPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminBooksPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "categories",
-        element: <CategoryPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <CategoryPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "authors",
-        element: <AuthorsPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AuthorsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "orders",
-        element: <AdminOrdersPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminOrdersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "users",
-        element: <AdminUsersPage />,
+        element: (
+          <ProtectedRoute roles={["admin"]}>
+            <AdminUsersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "settings",
-        element: <AdminSettingsPage />,
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminSettingsPage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

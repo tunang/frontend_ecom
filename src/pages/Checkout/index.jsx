@@ -48,12 +48,12 @@ const CheckoutPage = () => {
       description: "Visa, Mastercard, JCB",
       icon: CreditCard,
     },
-    {
-      id: "bank_transfer",
-      name: "Chuyển khoản ngân hàng",
-      description: "Chuyển khoản qua Internet Banking",
-      icon: Truck,
-    },
+    // {
+    //   id: "bank_transfer",
+    //   name: "Chuyển khoản ngân hàng",
+    //   description: "Chuyển khoản qua Internet Banking",
+    //   icon: Truck,
+    // },
   ];
 
   // Order note
@@ -65,9 +65,10 @@ const CheckoutPage = () => {
   );
 
   // Calculate totals
-  const shippingFee = 2.5;
+  const shippingFee = 5;
+  const vat = 0.1;
   const subtotal = getSelectedTotal();
-  const total = subtotal + shippingFee;
+  const total = subtotal + shippingFee + (subtotal * vat);
 
   // Check if cart is empty
   useEffect(() => {
@@ -386,6 +387,10 @@ const CheckoutPage = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping fee</span>
                     <span className="font-medium">${shippingFee.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">VAT</span>
+                    <span className="font-medium">${(subtotal * vat).toFixed(2)}</span>
                   </div>
                 </div>
 

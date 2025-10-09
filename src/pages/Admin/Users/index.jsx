@@ -63,7 +63,7 @@ const AdminUsersPage = () => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Không thể tải danh sách người dùng");
+      toast.error("Unable to fetch users");
     } finally {
       setLoading(false);
     }
@@ -99,13 +99,13 @@ const AdminUsersPage = () => {
     try {
       setDeleting(true);
       await UserService.admin.deleteUser(id);
-      toast.success("Xóa người dùng thành công");
+      toast.success("User deleted successfully");
       setDeletePopoverOpen(null);
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể xóa người dùng";
+        error.response?.data?.errors?.[0] || "Unable to delete user";
       toast.error(errorMessage);
     } finally {
       setDeleting(false);
@@ -129,9 +129,9 @@ const AdminUsersPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quản lý người dùng
+              Manage users
             </h1>
-            <p className="text-gray-600">Tổng số: {totalCount} người dùng</p>
+            <p className="text-gray-600">Total: {totalCount} users</p>
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -140,14 +140,14 @@ const AdminUsersPage = () => {
               className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <Trash2 className="w-4 h-4 mr-2" />
-              Thùng rác
+              Trash
             </Button>
             <Button
               onClick={handleAddNew}
               className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Thêm người dùng
+              Add user
             </Button>
           </div>
         </div>
@@ -159,7 +159,7 @@ const AdminUsersPage = () => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm theo tên hoặc email..."
+            placeholder="Search by name or email..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -176,10 +176,10 @@ const AdminUsersPage = () => {
             <div className="text-center py-20">
               <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "Không tìm thấy người dùng" : "Chưa có người dùng"}
+                {searchQuery ? "No users found" : "No users yet"}
               </h3>
               <p className="text-gray-600 mb-6">
-                {searchQuery ? "Thử tìm kiếm với từ khóa khác" : "Thêm người dùng đầu tiên để bắt đầu"}
+                {searchQuery ? "Try searching with a different keyword" : "Add the first user to get started"}
               </p>
               {!searchQuery && (
                 <Button
@@ -187,7 +187,7 @@ const AdminUsersPage = () => {
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Thêm người dùng
+                  Add user
                 </Button>
               )}
             </div>
@@ -197,10 +197,10 @@ const AdminUsersPage = () => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold">Họ và tên</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
                     <TableHead className="font-semibold">Email</TableHead>
-                    <TableHead className="font-semibold w-[140px]">Vai trò</TableHead>
-                    <TableHead className="text-right font-semibold w-[180px]">Thao tác</TableHead>
+                    <TableHead className="font-semibold w-[140px]">Role</TableHead>
+                    <TableHead className="text-center font-semibold w-[180px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -234,7 +234,7 @@ const AdminUsersPage = () => {
                             size="sm"
                             onClick={() => handleViewDetails(u)}
                             className="hover:bg-blue-50 hover:text-blue-600"
-                            title="Xem chi tiết"
+                            title="View details"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -244,7 +244,7 @@ const AdminUsersPage = () => {
                             size="sm"
                             onClick={() => handleEdit(u)}
                             className="hover:bg-blue-50 hover:text-blue-600"
-                            title="Chỉnh sửa"
+                            title="Edit"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -261,7 +261,7 @@ const AdminUsersPage = () => {
                                 variant="ghost"
                                 size="sm"
                                 className="hover:bg-red-50 hover:text-red-600"
-                                title="Xóa"
+                                    title="Delete"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -274,10 +274,10 @@ const AdminUsersPage = () => {
                                   </div>
                                   <div className="flex-1">
                                     <h3 className="font-semibold text-gray-900 mb-1">
-                                      Xác nhận xóa
+                                      Confirm delete
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                      Bạn có chắc chắn muốn xóa người dùng{" "}
+                                      Are you sure you want to delete user{" "}
                                       <span className="font-semibold">
                                         "{u.name}"
                                       </span>
@@ -294,7 +294,7 @@ const AdminUsersPage = () => {
                                     disabled={deleting}
                                     className="flex-1"
                                   >
-                                    Hủy
+                                    Cancel
                                   </Button>
                                   <Button
                                     size="sm"
@@ -305,10 +305,10 @@ const AdminUsersPage = () => {
                                     {deleting ? (
                                       <>
                                         <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                                        Đang xóa...
+                                        Deleting...
                                       </>
                                     ) : (
-                                      "Xóa"
+                                      "Delete"
                                     )}
                                   </Button>
                                 </div>

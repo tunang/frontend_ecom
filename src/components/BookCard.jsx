@@ -74,7 +74,7 @@ const BookCard = ({book}) => {
         </Link>
         <div className="p-4 space-y-2">
           <Link to={`/books/${book.slug || book.id}`}>
-            <h3 className="font-semibold text-base line-clamp-2 hover:text-amber-600 transition-colors">
+            <h3 className="font-semibold text-base line-clamp-1 hover:text-amber-600 transition-colors">
               {book.title}
             </h3>
           </Link>

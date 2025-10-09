@@ -38,22 +38,27 @@ import {
 } from "lucide-react";
 import OrderService from "@/services/order.service";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const AdminOrdersPage = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Initialize from URL params before any state
+  const initialStatus = searchParams.get("status") || "all";
+  const initialQuery = searchParams.get("query") || "";
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [sortBy, setSortBy] = useState("newest");
   const [expandedOrders, setExpandedOrders] = useState({});
   const [updatingStatus, setUpdatingStatus] = useState(null);
   const perPage = 10;
-
-  const navigate = useNavigate();
 
   const statusMap = {
     0: "pending",
@@ -210,21 +215,22 @@ const AdminOrdersPage = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          {/* Search Box */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search by customer name, email, phone..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset to page 1 when search
-              }}
-              className="pl-10"
-            />
-          </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            {/* Search Box */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search by customer name, email, phone..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1); // Reset to page 1 when search
+                }}
+                className="pl-10"
+              />
+            </div>
 
           {/* Filter by Status */}
           <div className="flex items-center gap-2">
@@ -268,6 +274,26 @@ const AdminOrdersPage = () => {
               </SelectContent>
             </Select>
           </div>
+          </div>
+          
+          {/* Search Badge */}
+          {/* {initialQuery && searchQuery && (
+            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg w-fit">
+              <Search className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-700">
+                Searching: "{searchQuery}"
+              </span>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  navigate('/admin/orders');
+                }}
+                className="ml-2 text-blue-600 hover:text-blue-800"
+              >
+                ✕
+              </button>
+            </div>
+          )} */}
         </div>
       </div>
 
