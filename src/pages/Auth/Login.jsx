@@ -18,10 +18,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
 import { useCartStore } from "@/store/useCartStore";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const {getCart} = useCartStore();
+  const { getCart } = useCartStore();
   const navigate = useNavigate();
 
   // Zustand store
@@ -51,6 +54,15 @@ const LoginPage = () => {
       });
     }
 
+    if (message === "account_not_activated") {
+      toast.error(
+        "Account not activated. Please check your email for activation link.",
+        {
+          duration: 5000,
+        }
+      );
+    }
+
     if (message === "login_success") {
       toast.success("Login successful", {
         duration: 5000,
@@ -62,8 +74,25 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     const result = await login(data);
+  };
 
-   
+  const handleSuccess = async (response) => {
+    const token = response.credential; // Google ID token
+    const userInfo = jwtDecode(token); // contains email, name, picture
+    console.log("token", token);
+    console.log('Google User:', userInfo);
+
+    try {
+      const res = await axios.post('http://localhost:3001/api/v1/auth/google', {
+        token, // send Google token to Rails
+      });
+
+      console.log('Rails response:', res.data);
+      localStorage.setItem('accessToken', res.data.access_token); // store access token
+      navigate('/');
+    } catch (err) {
+      console.error('Login error:', err.response?.data || err.message);
+    }
   };
 
   return (
@@ -83,8 +112,6 @@ const LoginPage = () => {
         <Card className="shadow-lg border-0">
           <CardContent className="pt-6 px-6 pb-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-
-
               {/* Email Field */}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -166,21 +193,21 @@ const LoginPage = () => {
             </div> */}
 
             {/* Social Login Buttons */}
-            {/* <div className="space-y-3">
+            <div className="space-y-3">
               <button className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200">
-                <Facebook className="w-5 h-5" />
-                <span className="text-gray-700 font-medium">
-                  Đăng nhập với Google
-                </span>
+                <GoogleLogin
+                  onSuccess={handleSuccess}
+                  onError={() => console.log("Login Failed")}
+                />
               </button>
 
-              <button className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200">
+              {/* <button className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200">
                 <Facebook className="w-5 h-5" />
                 <span className="text-gray-700 font-medium">
                   Đăng nhập với Facebook
                 </span>
-              </button>
-            </div> */}
+              </button> */}
+            </div>
           </CardContent>
         </Card>
 

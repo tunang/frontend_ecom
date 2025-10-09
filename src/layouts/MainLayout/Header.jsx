@@ -111,7 +111,7 @@ const Header = () => {
                       <MapPinCheck className="h-4 w-4" />
                       <span>Address</span>
                     </Link>
-                    {user?.role === "admin" && (
+                    {user?.role === "admin" || user?.role === "staff" ? (
                       <Link
                         to="/admin"
                         onClick={handleClose}
@@ -120,7 +120,7 @@ const Header = () => {
                         <Settings className="h-4 w-4" />
                         <span>Admin</span>
                       </Link>
-                    )}
+                    ) : null}
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-4 text-md hover:text-amber-600 w-full text-left"

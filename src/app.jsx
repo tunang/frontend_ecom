@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import router from "./routes";
 import { useAuthStore } from "./store/useAuthStore";
 import { useCartStore } from "./store/useCartStore";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = () => {
   const { initUser } = useAuthStore();
@@ -14,9 +15,11 @@ const App = () => {
   }, [initUser]);
 
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <div>
+        <RouterProvider router={router} />
+      </div>
+    </GoogleOAuthProvider>
   );
 };
 

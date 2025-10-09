@@ -237,7 +237,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                   </div>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[400px] p-0" align="start" sideOffset={4}>
+              <PopoverContent className="w-[400px] p-0" align="start" sideOffset={4} onWheel={(e) => e.stopPropagation()}>
                 <div className="flex flex-col max-h-[400px]">
                   {/* Search Box */}
                   <div className="p-3 border-b border-gray-200 flex-shrink-0">
@@ -255,8 +255,8 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
 
                   {/* Category List */}
                   <div 
-                    className="overflow-y-auto overscroll-contain scrollbar-thin" 
-                    style={{ maxHeight: "300px" }}
+                    className="overflow-y-auto" 
+                    style={{ maxHeight: "300px", overscrollBehavior: 'contain' }}
                   >
                     {/* No parent option */}
                     <button

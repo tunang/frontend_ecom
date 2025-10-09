@@ -79,7 +79,7 @@ const MobileNavbar = () => {
                 <>
                   {menuItems.map((item) => {
                     // Ẩn menu Admin nếu user không phải admin
-                    if (item.to === "/admin" && user?.role !== "admin") {
+                    if (item.to === "/admin" && user?.role !== "admin" && user?.role !== "staff") {
                       return null;
                     }
                     

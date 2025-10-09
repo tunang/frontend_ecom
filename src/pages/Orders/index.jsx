@@ -416,7 +416,7 @@ const OrdersPage = () => {
                                     )}
                                   </Button>
                                 
-                                <div className="flex gap-3">
+                                {/* <div className="flex gap-3">
                                   <Button
                                     variant="outline"
                                     className="flex-1"
@@ -430,7 +430,7 @@ const OrdersPage = () => {
                                   <Button className="flex-1 bg-gray-600 hover:bg-gray-700">
                                     Contact support
                                   </Button>
-                                </div>
+                                </div> */}
                               </div>
                             )}
                           </div>
