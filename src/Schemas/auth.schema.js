@@ -4,12 +4,12 @@ import { z } from "zod";
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, "Email là bắt buộc")
-    .email("Định dạng email không hợp lệ"),
+    .min(1, "Email is required")
+    .email("Invalid email format"),
   password: z
     .string()
-    .min(1, "Mật khẩu là bắt buộc")
-    .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+    .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters"),
 });
 
 // Register Schema
@@ -17,22 +17,22 @@ export const registerSchema = z
   .object({
     email: z
       .string()
-      .min(1, "Email là bắt buộc")
-      .email("Định dạng email không hợp lệ"),
+      .min(1, "Email is required")
+      .email("Invalid email format"),
     name: z
       .string()
-      .min(1, "Tên là bắt buộc")
-      .min(2, "Tên phải có ít nhất 2 ký tự")
-      .max(50, "Tên không được quá 50 ký tự"),
+      .min(1, "Name is required")
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name must be at most 50 characters"),
     password: z
       .string()
-      .min(1, "Mật khẩu là bắt buộc")
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-      .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số"),
-    password_confirmation: z.string().min(1, "Xác nhận mật khẩu là bắt buộc"),
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[0-9]/, "Password must contain at least 1 number"),
+    password_confirmation: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.password_confirmation, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password not match",
     path: ["password_confirmation"],
   });
 
@@ -40,8 +40,8 @@ export const registerSchema = z
 export const forgotPasswordSchema = z.object({
   email: z
     .string()
-    .min(1, "Email là bắt buộc")
-    .email("Định dạng email không hợp lệ"),
+    .min(1, "Email is required")
+    .email("Invalid email format"),
 });
 
 // Reset Password Schema (for API request)
@@ -50,13 +50,13 @@ export const resetPasswordSchema = z
     reset_password_token: z.string(),
     password: z
       .string()
-      .min(1, "Mật khẩu là bắt buộc")
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-      .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số"),
-    confirmation_password: z.string().min(1, "Xác nhận mật khẩu là bắt buộc"),
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[0-9]/, "Password must contain at least 1 number"),
+    confirmation_password: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.confirmation_password, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password not match",
     path: ["confirmation_password"],
   });
 
@@ -65,13 +65,13 @@ export const resetPasswordFormSchema = z
   .object({
     password: z
       .string()
-      .min(1, "Mật khẩu là bắt buộc")
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-      .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số"),
-    confirmation_password: z.string().min(1, "Xác nhận mật khẩu là bắt buộc"),
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[0-9]/, "Password must contain at least 1 number"),
+    confirmation_password: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.confirmation_password, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password not match",
     path: ["confirmation_password"],
   });
 
@@ -80,15 +80,15 @@ export const changePasswordSchema = z
   .object({
     current_password: z
       .string()
-      .min(1, "Mật khẩu hiện tại là bắt buộc"),
+      .min(1, "Current password is required"),
     password: z
       .string()
-      .min(1, "Mật khẩu mới là bắt buộc")
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-      .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số"),
-    password_confirmation: z.string().min(1, "Xác nhận mật khẩu là bắt buộc"),
+      .min(1, "New password is required")
+      .min(8, "New password must be at least 8 characters")
+      .regex(/[0-9]/, "New password must contain at least 1 number"),
+    password_confirmation: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.password_confirmation, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password not match",
     path: ["password_confirmation"],
   });

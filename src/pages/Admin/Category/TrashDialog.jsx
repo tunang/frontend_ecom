@@ -60,7 +60,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching deleted categories:", error);
-      toast.error("Không thể tải danh sách thùng rác");
+      toast.error("Cannot load trash list");
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     try {
       setRestoring((prev) => ({ ...prev, [id]: true }));
       await CategoryService.admin.restoreCategory(id);
-      toast.success("Khôi phục danh mục thành công");
+      toast.success("Restore category successfully");
       fetchDeletedCategories();
       if (onRestore) {
         onRestore();
@@ -78,7 +78,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     } catch (error) {
       console.error("Error restoring category:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể khôi phục danh mục";
+        error.response?.data?.errors?.[0] || "Restore category failed";
       toast.error(errorMessage);
     } finally {
       setRestoring((prev) => ({ ...prev, [id]: false }));
@@ -91,7 +91,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-purple-900 flex items-center gap-2">
             <Trash2 className="w-6 h-6" />
-            Thùng rác ({totalCount})
+            Trash ({totalCount})
           </DialogTitle>
         </DialogHeader>
 
@@ -104,10 +104,10 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
             <div className="text-center py-20 px-6">
               <Trash2 className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Thùng rác trống
+                Trash is empty
               </h3>
               <p className="text-gray-600">
-                Không có danh mục nào trong thùng rác
+                No category in trash
               </p>
             </div>
           ) : (
@@ -116,12 +116,12 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold">Tên danh mục</TableHead>
-                    <TableHead className="font-semibold">Mô tả</TableHead>
-                    <TableHead className="font-semibold">Danh mục cha</TableHead>
-                    <TableHead className="font-semibold">Danh mục con</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semibold">Description</TableHead>
+                    <TableHead className="font-semibold">Parent</TableHead>
+                    <TableHead className="font-semibold">Children</TableHead>
                     <TableHead className="text-right font-semibold w-[120px]">
-                      Thao tác
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -168,17 +168,17 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                           onClick={() => handleRestore(category.id)}
                           disabled={restoring[category.id]}
                           className="bg-green-600 hover:bg-green-700"
-                          title="Khôi phục"
+                          title="Restore"
                         >
                           {restoring[category.id] ? (
                             <>
                               <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                              Đang khôi phục...
+                              Restoring...
                             </>
                           ) : (
                             <>
                               <RotateCcw className="w-4 h-4 mr-1" />
-                              Khôi phục
+                              Restore
                             </>
                           )}
                         </Button>
@@ -258,7 +258,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
         {/* Footer */}
         <div className="flex justify-end pt-4 border-t">
           <Button variant="outline" onClick={onClose}>
-            Đóng
+            Close
           </Button>
         </div>
       </DialogContent>

@@ -16,9 +16,7 @@ const CheckoutCancel = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Payment cancelled
             </h1>
-            <p className="text-gray-600">
-              Your order has not been completed
-            </p>
+            <p className="text-gray-600">Your order has not been completed</p>
           </div>
 
           <CardContent className="p-8 space-y-6">
@@ -31,8 +29,8 @@ const CheckoutCancel = () => {
                     What happened?
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Bạn đã hủy quá trình thanh toán hoặc quá trình thanh toán đã bị gián đoạn.
-                    Đơn hàng của bạn chưa được xác nhận và không có khoản thanh toán nào được thực hiện.
+                    You have cancelled the payment or the payment was
+                    interrupted. Your order has been confirmed but not paid.
                   </p>
                 </div>
               </div>
@@ -45,9 +43,17 @@ const CheckoutCancel = () => {
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <RefreshCw className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 text-sm">Thử lại thanh toán</h4>
+                    <h4 className="font-medium text-gray-900 text-sm">
+                      Try again
+                    </h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      The product is still in your cart
+                      You can check your order in{" "}
+                      <Link
+                        to="/orders"
+                        className="text-amber-600 hover:text-amber-700 font-medium text-sm underline"
+                      >
+                        Orders
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -55,7 +61,9 @@ const CheckoutCancel = () => {
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <ShoppingBag className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 text-sm">Tiếp tục mua sắm</h4>
+                    <h4 className="font-medium text-gray-900 text-sm">
+                      Continue shopping
+                    </h4>
                     <p className="text-sm text-gray-600 mt-1">
                       Explore more products and come back later
                     </p>
@@ -69,7 +77,7 @@ const CheckoutCancel = () => {
               <Link to="/cart" className="flex-1">
                 <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Back to cart
+                  Back to cart  
                 </Button>
               </Link>
               <Link to="/books" className="flex-1">
@@ -85,13 +93,16 @@ const CheckoutCancel = () => {
               <p className="text-sm text-gray-600 mb-2">
                 Having trouble with payment?
               </p>
-              <Link to="/support" className="text-amber-600 hover:text-amber-700 font-medium text-sm">
+              <Link
+                to="/support"
+                className="text-amber-600 hover:text-amber-700 font-medium text-sm"
+              >
                 Contact support →
               </Link>
             </div>
 
             {/* Common Issues */}
-            <div className="bg-gray-50 rounded-lg p-4">
+            {/* <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="text-sm font-semibold text-gray-900 mb-2">
                 Common issues:
               </h4>
@@ -101,7 +112,7 @@ const CheckoutCancel = () => {
                 <li>• Payment session expired</li>
                 <li>• Internet connection interrupted</li>
               </ul>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>
@@ -110,4 +121,3 @@ const CheckoutCancel = () => {
 };
 
 export default CheckoutCancel;
-

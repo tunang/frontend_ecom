@@ -55,7 +55,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching deleted authors:", error);
-      toast.error("Không thể tải danh sách tác giả đã xóa");
+      toast.error("Cannot load trash list");
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     try {
       setRestoring(id);
       await AuthorService.admin.restoreAuthor(id);
-      toast.success("Khôi phục tác giả thành công");
+      toast.success("Restore author successfully");
       
       // Refresh deleted list
       await fetchDeletedAuthors();
@@ -77,7 +77,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     } catch (error) {
       console.error("Error restoring author:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể khôi phục tác giả";
+        error.response?.data?.errors?.[0] || "Restore author failed";
       toast.error(errorMessage);
     } finally {
       setRestoring(null);
@@ -95,10 +95,10 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Trash2 className="w-6 h-6 text-red-600" />
-            Thùng rác - Tác giả đã xóa
+            Trash - Author deleted
           </DialogTitle>
           <p className="text-sm text-gray-600 mt-1">
-            Tổng số: {totalCount} tác giả đã xóa
+            Total: {totalCount} authors deleted
           </p>
         </DialogHeader>
 
@@ -111,10 +111,10 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
             <div className="text-center py-20">
               <Trash2 className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Thùng rác trống
+                Trash is empty
               </h3>
               <p className="text-gray-600">
-                Không có tác giả nào đã bị xóa
+                No author in trash
               </p>
             </div>
           ) : (
@@ -123,13 +123,13 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold w-[100px]">Ảnh</TableHead>
-                    <TableHead className="font-semibold">Tên tác giả</TableHead>
-                    <TableHead className="font-semibold">Quốc tịch</TableHead>
-                    <TableHead className="font-semibold">Ngày sinh</TableHead>
-                    <TableHead className="font-semibold">Tiểu sử</TableHead>
+                    <TableHead className="font-semibold w-[100px]">Image</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semibold">Nationality</TableHead>
+                    <TableHead className="font-semibold">Birth date</TableHead>
+                    <TableHead className="font-semibold">Biography</TableHead>
                     <TableHead className="text-right font-semibold w-[120px]">
-                      Thao tác
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -190,12 +190,12 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                           {restoring === author.id ? (
                             <>
                               <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                              Đang khôi phục...
+                              Restoring...
                             </>
                           ) : (
                             <>
                               <RotateCcw className="w-4 h-4 mr-1" />
-                              Khôi phục
+                              Restore
                             </>
                           )}
                         </Button>
@@ -279,7 +279,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
             onClick={onClose}
             className="w-full"
           >
-            Đóng
+            Close
           </Button>
         </div>
       </DialogContent>
