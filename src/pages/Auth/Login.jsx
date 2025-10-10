@@ -18,9 +18,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
 import { useCartStore } from "@/store/useCartStore";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -68,33 +69,36 @@ const LoginPage = () => {
         duration: 5000,
       });
       getCart();
-      navigate("/");
+      window.location.href = "/";
     }
   }, [message]);
 
   const onSubmit = async (data) => {
     const result = await login(data);
   };
-
   const handleSuccess = async (response) => {
     const token = response.credential; // Google ID token
     const userInfo = jwtDecode(token); // contains email, name, picture
     console.log("token", token);
-    console.log('Google User:', userInfo);
+    console.log("Google User:", userInfo);
 
     try {
-      const res = await axios.post('http://localhost:3001/api/v1/auth/google', {
+      const res = await axios.post("http://localhost:3001/api/v1/auth/google", {
         token, // send Google token to Rails
       });
 
-      console.log('Rails response:', res.data);
-      localStorage.setItem('accessToken', res.data.access_token); // store access token
-      navigate('/');
+      console.log("Rails response:", res.data);
+      localStorage.setItem("accessToken", res.data.access_token); // store access token
+      window.location.href = "/";
     } catch (err) {
-      console.error('Login error:', err.response?.data || err.message);
+      console.error("Login error:", err.response?.data || err.message);
     }
   };
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: handleSuccess,
+    onError: () => console.log("Login Failed"),
+  });
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-orange-50 px-4">
       <div className="w-full max-w-md">
@@ -195,10 +199,12 @@ const LoginPage = () => {
             {/* Social Login Buttons */}
             <div className="space-y-3">
               <button className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200">
+                {" "}
                 <GoogleLogin
                   onSuccess={handleSuccess}
                   onError={() => console.log("Login Failed")}
-                />
+                  locale="en"
+                />{" "}
               </button>
 
               {/* <button className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200">

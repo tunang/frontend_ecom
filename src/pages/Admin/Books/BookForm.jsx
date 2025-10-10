@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { bookSchema } from "@/Schemas/book.schema";
 import BookService from "@/services/book.service";
 import AuthorService from "@/services/author.service";
 import CategoryService from "@/services/category.service";
@@ -22,24 +25,37 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    price: "",
-    stock_quantity: "",
-    featured: false,
-    sold_count: "",
-    cost_price: "",
-    discount_percentage: "",
-    author_ids: [],
-    category_ids: [],
-  });
   const [coverImage, setCoverImage] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
   const [samplePages, setSamplePages] = useState([]);
   const [samplePreviews, setSamplePreviews] = useState([]);
   const [authorSearch, setAuthorSearch] = useState("");
   const [categorySearch, setCategorySearch] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset,
+  } = useForm({
+    resolver: zodResolver(bookSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      price: "",
+      stock_quantity: "",
+      featured: false,
+      sold_count: "",
+      cost_price: "",
+      discount_percentage: "",
+      author_ids: [],
+      category_ids: [],
+    },
+  });
+
+  const formValues = watch();
 
   useEffect(() => {
     if (open) {
@@ -49,15 +65,15 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (book) {
-      setFormData({
+      reset({
         title: book.title || "",
         description: book.description || "",
-        price: book.price || "",
-        stock_quantity: book.stock_quantity || "",
+        price: book.price?.toString() || "",
+        stock_quantity: book.stock_quantity?.toString() || "",
         featured: book.featured || false,
-        sold_count: book.sold_count || "",
-        cost_price: book.cost_price || "",
-        discount_percentage: book.discount_percentage || "",
+        sold_count: book.sold_count?.toString() || "",
+        cost_price: book.cost_price?.toString() || "",
+        discount_percentage: book.discount_percentage?.toString() || "",
         author_ids: book.authors?.map(author => author.id) || [],
         category_ids: book.categories?.map(category => category.id) || [],
       });
@@ -73,7 +89,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       }
     } else {
       // Reset form when creating new
-      setFormData({
+      reset({
         title: "",
         description: "",
         price: "",
@@ -90,7 +106,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       setSamplePages([]);
       setSamplePreviews([]);
     }
-  }, [book]);
+  }, [book, reset]);
 
   const fetchAuthorsAndCategories = async () => {
     try {
@@ -109,13 +125,6 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
 
   const handleCoverImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -153,30 +162,27 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
   };
 
   const handleAuthorToggle = (authorId) => {
-    setFormData(prev => ({
-      ...prev,
-      author_ids: prev.author_ids.includes(authorId)
-        ? prev.author_ids.filter(id => id !== authorId)
-        : [...prev.author_ids, authorId]
-    }));
+    const currentIds = formValues.author_ids || [];
+    const newIds = currentIds.includes(authorId)
+      ? currentIds.filter(id => id !== authorId)
+      : [...currentIds, authorId];
+    setValue("author_ids", newIds, { shouldValidate: true });
   };
 
   const handleCategoryToggle = (categoryId) => {
-    setFormData(prev => ({
-      ...prev,
-      category_ids: prev.category_ids.includes(categoryId)
-        ? prev.category_ids.filter(id => id !== categoryId)
-        : [...prev.category_ids, categoryId]
-    }));
+    const currentIds = formValues.category_ids || [];
+    const newIds = currentIds.includes(categoryId)
+      ? currentIds.filter(id => id !== categoryId)
+      : [...currentIds, categoryId];
+    setValue("category_ids", newIds, { shouldValidate: true });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setIsLoading(true);
 
     try {
       const submitData = {
-        ...formData,
+        ...data,
         cover_image: coverImage,
         sample_pages: samplePages,
       };
@@ -184,17 +190,17 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       if (book) {
         console.log(submitData);
         await BookService.admin.updateBook(book.id, submitData);
-        toast.success("Update book successfully");
+        toast.success("Cập nhật sách thành công");
       } else {
         await BookService.admin.createBook(submitData);
-        toast.success("Add book successfully");
+        toast.success("Thêm sách thành công");
       }
       onSuccess();
     } catch (error) {
       console.error("Error saving book:", error);
       const errorMessage =
         error.response?.data?.errors?.[0] ||
-        (book ? "Failed to update book" : "Failed to add book");
+        (book ? "Cập nhật sách thất bại" : "Thêm sách thất bại");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -214,132 +220,155 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-blue-900">
-            {book ? "Edit book" : "Add book"}
+            {book ? "Chỉnh sửa sách" : "Thêm sách mới"}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-4">
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title <span className="text-red-500">*</span>
+                Tiêu đề <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter title"
+                {...register("title")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.title 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
+                placeholder="Nhập tiêu đề sách"
               />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price <span className="text-red-500">*</span>
+                Giá bán <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.01"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                {...register("price")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.price 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
                 placeholder="0.00"
               />
+              {errors.price && (
+                <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>
+              )}
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
+              Mô tả
             </label>
             <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
+              {...register("description")}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              placeholder="Enter description"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 resize-none ${
+                errors.description 
+                  ? "border-red-500 focus:ring-red-500" 
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
+              placeholder="Nhập mô tả sách"
             />
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+            )}
           </div>
 
           {/* Stock & Pricing */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stock quantity
+                Số lượng tồn kho <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
-                name="stock_quantity"
-                value={formData.stock_quantity}
-                onChange={handleChange}
-                min="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                {...register("stock_quantity")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.stock_quantity 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
                 placeholder="0"
               />
+              {errors.stock_quantity && (
+                <p className="text-red-500 text-sm mt-1">{errors.stock_quantity.message}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Cost price
+                Giá vốn
               </label>
               <input
-                type="number"
-                name="cost_price"
-                value={formData.cost_price}
-                onChange={handleChange}
-                min="0"
-                step="0.01"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                {...register("cost_price")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.cost_price 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
                 placeholder="0.00"
               />
+              {errors.cost_price && (
+                <p className="text-red-500 text-sm mt-1">{errors.cost_price.message}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Discount percentage
+                Phần trăm giảm giá
               </label>
               <input
-                type="number"
-                name="discount_percentage"
-                value={formData.discount_percentage}
-                onChange={handleChange}
-                min="0"
-                max="100"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                {...register("discount_percentage")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.discount_percentage 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
                 placeholder="0"
               />
+              {errors.discount_percentage && (
+                <p className="text-red-500 text-sm mt-1">{errors.discount_percentage.message}</p>
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Sold count
+                Số lượng đã bán
               </label>
               <input
-                type="number"
-                name="sold_count"
-                value={formData.sold_count}
-                onChange={handleChange}
-                min="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                {...register("sold_count")}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.sold_count 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
                 placeholder="0"
               />
+              {errors.sold_count && (
+                <p className="text-red-500 text-sm mt-1">{errors.sold_count.message}</p>
+              )}
             </div>
 
             <div className="flex items-center">
               <input
                 type="checkbox"
-                name="featured"
-                checked={formData.featured}
-                onChange={handleChange}
+                {...register("featured")}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label className="ml-2 text-sm font-medium text-gray-700">
@@ -351,19 +380,21 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Authors Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Author
+              Tác giả <span className="text-red-500">*</span>
             </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full justify-start"
+                  className={`w-full justify-start ${
+                    errors.author_ids ? "border-red-500" : ""
+                  }`}
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  {formData.author_ids.length > 0 
-                    ? `${formData.author_ids.length} authors selected`
-                    : "Select author"
+                  {formValues.author_ids?.length > 0 
+                    ? `Đã chọn ${formValues.author_ids.length} tác giả`
+                    : "Chọn tác giả"
                   }
                 </Button>
               </PopoverTrigger>
@@ -375,7 +406,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                       type="text"
                       value={authorSearch}
                       onChange={(e) => setAuthorSearch(e.target.value)}
-                      placeholder="Search author..."
+                      placeholder="Tìm kiếm tác giả..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -394,7 +425,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                           >
                             <input
                               type="checkbox"
-                              checked={formData.author_ids.includes(author.id)}
+                              checked={formValues.author_ids?.includes(author.id)}
                               onChange={() => handleAuthorToggle(author.id)}
                               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
@@ -406,24 +437,29 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                 </div>
               </PopoverContent>
             </Popover>
+            {errors.author_ids && (
+              <p className="text-red-500 text-sm mt-1">{errors.author_ids.message}</p>
+            )}
           </div>
 
           {/* Categories Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
+              Danh mục <span className="text-red-500">*</span>
             </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full justify-start"
+                  className={`w-full justify-start ${
+                    errors.category_ids ? "border-red-500" : ""
+                  }`}
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  {formData.category_ids.length > 0 
-                    ? `${formData.category_ids.length} categories selected`
-                    : "Select category"
+                  {formValues.category_ids?.length > 0 
+                    ? `Đã chọn ${formValues.category_ids.length} danh mục`
+                    : "Chọn danh mục"
                   }
                 </Button>
               </PopoverTrigger>
@@ -435,7 +471,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                       type="text"
                       value={categorySearch}
                       onChange={(e) => setCategorySearch(e.target.value)}
-                      placeholder="Search category..."
+                      placeholder="Tìm kiếm danh mục..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -454,7 +490,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                           >
                             <input
                               type="checkbox"
-                              checked={formData.category_ids.includes(category.id)}
+                              checked={formValues.category_ids?.includes(category.id)}
                               onChange={() => handleCategoryToggle(category.id)}
                               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
@@ -466,12 +502,15 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                 </div>
               </PopoverContent>
             </Popover>
+            {errors.category_ids && (
+              <p className="text-red-500 text-sm mt-1">{errors.category_ids.message}</p>
+            )}
           </div>
 
           {/* Cover Image */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cover image
+              Ảnh bìa
             </label>
             {coverPreview ? (
               <div className="relative inline-block">
@@ -505,10 +544,10 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                     <ImageIcon className="w-8 h-8 text-blue-600" />
                   </div>
                   <p className="text-sm font-medium text-gray-700 mb-1">
-                    Click to upload cover image
+                    Nhấn để tải lên ảnh bìa
                   </p>
                   <p className="text-xs text-gray-500">
-                    PNG, JPG, GIF (Max 5MB)
+                    PNG, JPG, GIF (Tối đa 5MB)
                   </p>
                 </label>
               </div>
@@ -518,7 +557,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
           {/* Sample Pages */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sample pages
+              Trang mẫu
             </label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
               <input
@@ -537,10 +576,10 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
                   <ImageIcon className="w-8 h-8 text-blue-600" />
                 </div>
                 <p className="text-sm font-medium text-gray-700 mb-1">
-                  Click to upload sample pages
+                  Nhấn để tải lên trang mẫu
                 </p>
                 <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF (Max 5MB per file)
+                  PNG, JPG, GIF (Tối đa 5MB mỗi file)
                 </p>
               </label>
             </div>
@@ -576,7 +615,7 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Cancel
+              Hủy
             </Button>
             <Button
               type="submit"
@@ -586,10 +625,10 @@ const BookForm = ({ book, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Saving...
+                  Đang lưu...
                 </>
               ) : (
-                <>{book ? "Update" : "Add book"}</>
+                <>{book ? "Cập nhật" : "Thêm sách"}</>
               )}
             </Button>
           </div>

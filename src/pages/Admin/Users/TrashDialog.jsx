@@ -55,7 +55,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
       setTotalCount(response.pagination?.total_count || 0);
     } catch (error) {
       console.error("Error fetching deleted users:", error);
-      toast.error("Không thể tải danh sách người dùng đã xóa");
+      toast.error("Cannot load trash list");
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     try {
       setRestoring(id);
       await UserService.admin.restoreUser(id);
-      toast.success("Khôi phục người dùng thành công");
+      toast.success("Restore user successfully");
       
       // Refresh deleted list
       await fetchDeletedUsers();
@@ -77,7 +77,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
     } catch (error) {
       console.error("Error restoring user:", error);
       const errorMessage =
-        error.response?.data?.errors?.[0] || "Không thể khôi phục người dùng";
+        error.response?.data?.errors?.[0] || "Restore user failed";
       toast.error(errorMessage);
     } finally {
       setRestoring(null);
@@ -90,10 +90,10 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Trash2 className="w-6 h-6 text-red-600" />
-            Thùng rác - Người dùng đã xóa
+            Trash - User deleted
           </DialogTitle>
           <p className="text-sm text-gray-600 mt-1">
-            Tổng số: {totalCount} người dùng đã xóa
+            Total: {totalCount} users deleted
           </p>
         </DialogHeader>
 
@@ -106,10 +106,10 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
             <div className="text-center py-20">
               <Trash2 className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Thùng rác trống
+                Trash is empty
               </h3>
               <p className="text-gray-600">
-                Không có người dùng nào đã bị xóa
+                No user in trash
               </p>
             </div>
           ) : (
@@ -118,11 +118,11 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                 <TableHeader>
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="font-semibold w-[80px]">ID</TableHead>
-                    <TableHead className="font-semibold">Họ và tên</TableHead>
+                    <TableHead className="font-semibold">Name</TableHead>
                     <TableHead className="font-semibold">Email</TableHead>
-                    <TableHead className="font-semibold w-[140px]">Vai trò</TableHead>
+                    <TableHead className="font-semibold w-[140px]">Role</TableHead>
                     <TableHead className="text-right font-semibold w-[150px]">
-                      Thao tác
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -162,12 +162,12 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
                           {restoring === u.id ? (
                             <>
                               <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                              Đang khôi phục...
+                              Restoring...
                             </>
                           ) : (
                             <>
                               <RotateCcw className="w-4 h-4 mr-1" />
-                              Khôi phục
+                              Restore
                             </>
                           )}
                         </Button>
@@ -251,7 +251,7 @@ const TrashDialog = ({ open, onClose, onRestore }) => {
             onClick={onClose}
             className="w-full"
           >
-            Đóng
+            Close
           </Button>
         </div>
       </DialogContent>

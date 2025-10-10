@@ -245,8 +245,16 @@ const UserDetailDialog = ({ open, onClose, user }) => {
                               <div className="space-y-2">
                                 {expandedOrders[order.id].order_items?.map((item) => (
                                   <div
+                                    onClick={() => {
+                                      window.open(
+                                        `/books/${
+                                          item.book.slug || item.book.id
+                                        }`,
+                                        "_blank"
+                                      );
+                                    }}
                                     key={item.id}
-                                    className="flex items-center gap-3 bg-white p-3 rounded border"
+                                    className="flex items-center gap-3 bg-white p-3 rounded border hover:bg-gray-100 cursor-pointer"
                                   >
                                     {item.book?.cover_image_url ? (
                                       <img

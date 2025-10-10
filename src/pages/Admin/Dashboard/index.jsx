@@ -57,6 +57,7 @@ const DashboardPage = () => {
           pendingOrders: prev.pendingOrders + 1,
         }));
 
+
         // Refresh recent orders list
         fetchRecentOrders();
       }
