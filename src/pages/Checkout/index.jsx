@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import AddressService from "@/services/address.service";
 import OrderService from "@/services/order.service";
+import SettingService from "@/services/setting.service";
 import { useCartStore } from "@/store/useCartStore";
 
 const CheckoutPage = () => {
@@ -33,6 +34,13 @@ const CheckoutPage = () => {
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  // Settings
+  const [settings, setSettings] = useState({
+    tax_rate: 0.1, // default 10%
+    shipping_cost: 5, // default $5
+  });
+  const [isLoadingSettings, setIsLoadingSettings] = useState(false);
+
   // Payment Methods
   const [selectedPayment, setSelectedPayment] = useState("credit_card");
   const paymentMethods = [
@@ -44,8 +52,8 @@ const CheckoutPage = () => {
     // },
     {
       id: "credit_card",
-      name: "Thẻ tín dụng/Ghi nợ",
-      description: "Visa, Mastercard, JCB",
+      name: "Stripe",
+      description: "Stripe payment",
       icon: CreditCard,
     },
     // {
@@ -65,8 +73,8 @@ const CheckoutPage = () => {
   );
 
   // Calculate totals
-  const shippingFee = 5;
-  const vat = 0.1;
+  const shippingFee = parseFloat(settings.shipping_cost);
+  const vat = parseFloat(settings.tax_rate);
   const subtotal = getSelectedTotal();
   const total = subtotal + shippingFee + (subtotal * vat);
 
@@ -105,6 +113,30 @@ const CheckoutPage = () => {
     };
 
     fetchAddresses();
+  }, []);
+
+  // Fetch settings
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        setIsLoadingSettings(true);
+        const response = await SettingService.user.getSettings();
+        if (response.data) {
+          setSettings({
+            tax_rate: parseFloat(response.data.tax_rate) || 0.1,
+            shipping_cost: parseFloat(response.data.shipping_cost) || 5,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        // Sử dụng giá trị mặc định nếu lỗi
+        toast.error("Không thể tải cài đặt. Sử dụng giá trị mặc định.");
+      } finally {
+        setIsLoadingSettings(false);
+      }
+    };
+
+    fetchSettings();
   }, []);
 
   const validateForm = () => {

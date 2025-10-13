@@ -4,6 +4,7 @@ const OrderService = {
   // Tạo đơn hàng
   createOrder: async (data) => {
     try {
+      console.log(data);
       const response = await api.post("/user/orders", data);
       return response;
     } catch (error) {

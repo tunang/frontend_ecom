@@ -80,24 +80,24 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
           submitData.password = formData.password;
         }
         await UserService.admin.updateUser(user.id, submitData);
-        toast.success("Cập nhật người dùng thành công");
+        toast.success("Update user successfully");
       } else {
         // Create new user - password is required
         if (!formData.password) {
-          toast.error("Vui lòng nhập mật khẩu");
+          toast.error("Please enter password");
           setIsLoading(false);
           return;
         }
         submitData.password = formData.password;
         await UserService.admin.createUser(submitData);
-        toast.success("Thêm người dùng thành công");
+        toast.success("Add user successfully");
       }
       onSuccess();
     } catch (error) {
       console.error("Error saving user:", error);
       const errorMessage =
         error.response?.data?.errors?.[0] ||
-        (user ? "Không thể cập nhật người dùng" : "Không thể thêm người dùng");
+        (user ? "Cannot update user" : "Cannot add user");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -109,7 +109,7 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-blue-900">
-            {user ? "Chỉnh sửa người dùng" : "Thêm người dùng"}
+            {user ? "Edit user" : "Add user"}
           </DialogTitle>
         </DialogHeader>
 
@@ -118,7 +118,7 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Họ và tên <span className="text-red-500">*</span>
+              Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -127,14 +127,14 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Ví dụ: Nguyễn Văn A"
+              placeholder="Example: John Doe"
             />
           </div>
 
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email <span className="text-red-500">*</span>
+              Email <span className="text-red-500">*</span> (Cannot be changed)
             </label>
             <input
               type="email"
@@ -145,14 +145,15 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed text-gray-500"
               placeholder="example@email.com"
+              disabled
             />
           </div>
 
           {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mật khẩu {!user && <span className="text-red-500">*</span>}
-              {user && <span className="text-gray-500 text-xs ml-2">(Để trống nếu không muốn thay đổi)</span>}
+              Password {!user && <span className="text-red-500">*</span>}
+              {user && <span className="text-gray-500 text-xs ml-2">(Leave blank if you don't want to change)</span>}
             </label>
             <div className="relative">
               <input
@@ -162,7 +163,7 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required={!user}
                 className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder={user ? "Nhập mật khẩu mới (nếu muốn thay đổi)" : "Nhập mật khẩu"}
+                placeholder={user ? "Enter new password (if you want to change)" : "Enter password"}
               />
               <button
                 type="button"
@@ -181,11 +182,11 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
           {/* Role */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Vai trò <span className="text-red-500">*</span>
+                Role <span className="text-red-500">*</span>
             </label>
             <Select value={formData.role} onValueChange={handleRoleChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Chọn vai trò" />
+                <SelectValue placeholder="Select role" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">User</SelectItem>
@@ -204,7 +205,7 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -214,10 +215,10 @@ const UserForm = ({ user, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Đang lưu...
+                  Saving...
                 </>
               ) : (
-                <>{user ? "Cập nhật" : "Thêm người dùng"}</>
+                <>{user ? "Update" : "Add user"}</>
               )}
             </Button>
           </div>
