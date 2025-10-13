@@ -300,7 +300,7 @@ const DashboardPage = () => {
         </Card>
 
         {/* Popular Books */}
-        <Card className="border-2 border-gray-100">
+        {/* <Card className="border-2 border-gray-100">
           <CardHeader className="border-b border-gray-100 bg-gray-50">
             <CardTitle className="text-lg flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-amber-600" />
@@ -313,7 +313,7 @@ const DashboardPage = () => {
               <p>Coming soon</p>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );
