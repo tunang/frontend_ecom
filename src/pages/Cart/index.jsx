@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { useCartStore } from "@/store/useCartStore";
 import TestStore from "../../components/TestStore";
+import roundHalfDown from "@/util/RoundHalfDown";
 
 const Cart = () => {
   const {
@@ -277,7 +278,7 @@ const Cart = () => {
                         {/* Price */}
                         <div className="flex items-baseline gap-2 mb-3">
                           <span className="text-xl font-bold text-amber-600">
-                            ${discountedPrice.toFixed(2)}
+                            ${roundHalfDown(discountedPrice, 2)}
                           </span>
                           {book.discount_percentage > 0 && (
                             <>
