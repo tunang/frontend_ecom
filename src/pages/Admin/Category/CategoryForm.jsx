@@ -107,11 +107,11 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
       if (category) {
         // Update existing category
         await CategoryService.admin.updateCategory(category.id, submitData);
-        toast.success("Cập nhật danh mục thành công");
+        toast.success("Update category successfully");
       } else {
         // Create new category
         await CategoryService.admin.createCategory(submitData);
-        toast.success("Thêm danh mục thành công");
+        toast.success("Add category successfully");
       }
       onSuccess();
     } catch (error) {
@@ -119,8 +119,8 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
       const errorMessage =
         error.response?.data?.errors?.[0] ||
         (category
-          ? "Không thể cập nhật danh mục"
-          : "Không thể thêm danh mục");
+          ? "Cannot update category"
+          : "Cannot add category");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -156,7 +156,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-purple-900">
-            {category ? "Chỉnh sửa danh mục" : "Thêm danh mục mới"}
+            {category ? "Edit category" : "Add category"}
           </DialogTitle>
         </DialogHeader>
 
@@ -165,7 +165,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tên danh mục <span className="text-red-500">*</span>
+              Category name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -174,14 +174,14 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="Ví dụ: Fiction, Non-Fiction..."
+              placeholder="Example: Fiction, Non-Fiction..."
             />
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mô tả
+              Description
             </label>
             <textarea
               name="description"
@@ -189,14 +189,14 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
               onChange={handleChange}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-              placeholder="Mô tả ngắn về danh mục..."
+              placeholder="Short description of the category..."
             />
           </div>
 
           {/* Parent Category */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Danh mục cha (Tùy chọn)
+              Parent category (Optional)
             </label>
             <Popover
               open={parentPopoverOpen}
@@ -214,13 +214,13 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                       {selectedParent.name}
                       {selectedParent.parent && (
                         <span className="text-gray-500 text-sm ml-1">
-                          (thuộc {selectedParent.parent.name})
+                          (belongs to {selectedParent.parent.name})
                         </span>
                       )}
                     </span>
                   ) : (
                     <span className="text-gray-500">
-                      Không có danh mục cha
+                      No parent category
                     </span>
                   )}
                   <div className="flex items-center gap-1">
@@ -245,7 +245,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                       <input
                         type="text"
-                        placeholder="Tìm kiếm danh mục..."
+                        placeholder="Search category..."
                         value={parentSearchQuery}
                         onChange={(e) => setParentSearchQuery(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
@@ -268,7 +268,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                       )}
                     >
                       <span className="text-sm text-gray-600">
-                        -- Không có danh mục cha --
+                        -- No parent category --
                       </span>
                       {!selectedParent && (
                         <Check className="h-4 w-4 text-purple-600" />
@@ -279,8 +279,8 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                     {categoriesForSelect.length === 0 ? (
                       <div className="px-3 py-8 text-center text-sm text-gray-500">
                         {parentSearchQuery
-                          ? "Không tìm thấy danh mục"
-                          : "Không có danh mục khả dụng"}
+                          ? "No category found"
+                          : "No available category"}
                       </div>
                     ) : (
                       categoriesForSelect.map((cat) => (
@@ -299,7 +299,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
                             </p>
                             {cat.parent && (
                               <p className="text-xs text-gray-500 truncate">
-                                thuộc {cat.parent.name}
+                                belongs to {cat.parent.name}
                               </p>
                             )}
                           </div>
@@ -314,7 +314,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
               </PopoverContent>
             </Popover>
             <p className="text-xs text-gray-500 mt-1">
-              Chọn danh mục cha nếu đây là danh mục con
+              Select parent category if this is a sub-category
             </p>
           </div>
 
@@ -327,7 +327,7 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
               disabled={isLoading}
               className="flex-1"
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -337,10 +337,10 @@ const CategoryForm = ({ category, categories, open, onClose, onSuccess }) => {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                  Đang lưu...
+                    Saving...
                 </>
               ) : (
-                <>{category ? "Cập nhật" : "Thêm danh mục"}</>
+                <>{category ? "Update" : "Add category"}</>
               )}
             </Button>
           </div>
