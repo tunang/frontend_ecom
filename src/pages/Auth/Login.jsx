@@ -83,7 +83,7 @@ const LoginPage = () => {
     console.log("Google User:", userInfo);
 
     try {
-      const res = await axios.post("http://localhost:3001/api/v1/auth/google", {
+      const res = await axios.post(import.meta.env.VITE_API_BASE_URL + "/auth/google", {
         token, // send Google token to Rails
       });
 
