@@ -39,12 +39,14 @@ apiBase.interceptors.response.use(
     // Xử lý các lỗi phổ biến
     if (error.response) {
       const { status } = error.response;
-      
       switch (status) {
         case 401:
+          if(error.response.data.status.message === "invalid_token"){
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+          }
           // Unauthorized - Token hết hạn hoặc không hợp lệ
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
+          
           // Có thể redirect về trang login
           // window.location.href = "/login";
           break;

@@ -251,7 +251,7 @@ const AddressForm = ({ address, open, onClose, onSuccess }) => {
                   Saving...
                 </>
               ) : (
-                <>{address ? "Cập nhật" : "Thêm địa chỉ"}</>
+                <>{address ? "Update" : "Add"}</>
               )}
             </Button>
           </div>

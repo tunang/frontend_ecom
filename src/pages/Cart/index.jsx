@@ -56,8 +56,6 @@ const Cart = () => {
     getCart();
   }, []);
 
-
-
   const handleUpdateQuantity = async (bookId, newQuantity, stockQuantity) => {
     // if (newQuantity < 1 || newQuantity > stockQuantity) {
     //   toast.error(`Số lượng phải từ 1 đến ${stockQuantity}`);
@@ -109,7 +107,8 @@ const Cart = () => {
   };
 
   // Check if all items are selected
-  const isAllSelected = items.length > 0 && selectedItems.length === items.length;
+  const isAllSelected =
+    items.length > 0 && selectedItems.length === items.length;
 
   const handleToggleSelectAll = () => {
     if (isAllSelected) {
@@ -124,7 +123,7 @@ const Cart = () => {
       toast.error("Vui lòng chọn ít nhất một sản phẩm");
       return;
     }
-    
+
     // Log order items format for debugging
     console.log("Order items:", getSelectedOrderItems());
     navigate("/checkout");
@@ -140,13 +139,10 @@ const Cart = () => {
       toast.success("Item removed");
       clearMessage();
     }
-
   }, [message]);
-
 
   if (items.length === 0) {
     return (
-
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Giỏ hàng</h1>
@@ -180,11 +176,11 @@ const Cart = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Giỏ hàng ({items.length} sản phẩm)
+              Cart ({items.length} items)
             </h1>
             {selectedItems.length > 0 && (
               <p className="text-sm text-gray-600 mt-1">
-                Đã chọn {selectedItems.length} sản phẩm
+                Selected {selectedItems.length} items
               </p>
             )}
           </div>
@@ -194,7 +190,7 @@ const Cart = () => {
             className="text-red-600 border-red-600 hover:bg-red-50 hover:cursor-pointer"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Xóa tất cả
+            Clear all
           </Button>
         </div>
 
@@ -247,15 +243,14 @@ const Cart = () => {
                       >
                         <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden">
                           <img
-                            src={
-                              `${import.meta.env.VITE_API_IMAGE_URL}${
-                                book.cover_image_url
-                              }`
-                            }
+                            src={`${import.meta.env.VITE_API_IMAGE_URL}${
+                              book.cover_image_url
+                            }`}
                             alt={book.title}
                             className="w-full h-full object-cover hover:scale-105 transition-transform"
                             onError={(e) => {
-                              e.target.src = "https://placehold.co/150?text=X&font=roboto";
+                              e.target.src =
+                                "https://placehold.co/150?text=X&font=roboto";
                             }}
                           />
                         </div>
@@ -278,7 +273,7 @@ const Cart = () => {
                         {/* Price */}
                         <div className="flex items-baseline gap-2 mb-3">
                           <span className="text-xl font-bold text-amber-600">
-                            ${roundHalfDown(discountedPrice, 2)}
+                            ${discountedPrice.toFixed(2)}
                           </span>
                           {book.discount_percentage > 0 && (
                             <>
@@ -328,7 +323,8 @@ const Cart = () => {
                                 )
                               }
                               disabled={
-                                item.quantity >= book.stock_quantity || isUpdating
+                                item.quantity >= book.stock_quantity ||
+                                isUpdating
                               }
                               className="h-8 w-8 p-0"
                             >
@@ -355,18 +351,18 @@ const Cart = () => {
                                 className="text-red-600 hover:text-red-700 hover:bg-red-50"
                               >
                                 <Trash2 className="h-4 w-4 mr-1" />
-                                Xóa
+                                Delete
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">
                               <div className="space-y-4">
                                 <div>
                                   <h4 className="font-semibold text-gray-900 mb-1">
-                                    Xác nhận xóa
+                                    Confirm delete
                                   </h4>
                                   <p className="text-sm text-gray-600">
-                                    Bạn có chắc chắn muốn xóa "{book.title}" khỏi giỏ
-                                    hàng?
+                                    Are you sure you want to delete "
+                                    {book.title}" from the cart? hàng?
                                   </p>
                                 </div>
                                 <div className="flex gap-2 justify-end">
@@ -380,7 +376,7 @@ const Cart = () => {
                                       }))
                                     }
                                   >
-                                    Hủy
+                                    Cancel
                                   </Button>
                                   <Button
                                     size="sm"
@@ -389,7 +385,7 @@ const Cart = () => {
                                       handleRemoveItem(book.id, book.title)
                                     }
                                   >
-                                    Xóa
+                                    Delete
                                   </Button>
                                 </div>
                               </div>
@@ -446,7 +442,7 @@ const Cart = () => {
                   Checkout ({selectedItems.length})
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
-                
+
                 {selectedItems.length === 0 && (
                   <p className="text-xs text-center text-red-500 mt-2">
                     Please select at least one item
@@ -466,29 +462,30 @@ const Cart = () => {
         </div>
 
         {/* Clear Cart Dialog */}
-        <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Xóa tất cả sản phẩm</DialogTitle>
-              <DialogDescription>
-                Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng không?
-                Hành động này không thể hoàn tác.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setShowClearDialog(false)}
-              >
-                Hủy
-              </Button>
-              <Button variant="destructive" onClick={handleClearCart}>
-                <Trash2 className="h-4 w-4 mr-2" />
-                Xóa tất cả
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+      
+          <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+            <DialogContent className="max-w-7xl mx-auto px-4">
+              <DialogHeader>
+                <DialogTitle>Clear all items</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to clear all items in the cart? This
+                  action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowClearDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleClearCart}>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear all
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
       </div>
     </div>
   );
