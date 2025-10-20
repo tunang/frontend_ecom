@@ -203,7 +203,7 @@ const AdminSettingsPage = () => {
         </Card>
 
         {/* Info Card */}
-        <Card className="mt-6 bg-amber-50 border-amber-200">
+        <Card className="mt-6 bg-amber-50 border-amber-200 py-0">
           <CardContent className="p-4">
             <h4 className="font-semibold text-amber-900 mb-2">Note:</h4>
             <ul className="text-sm text-amber-800 space-y-1 list-disc list-inside">

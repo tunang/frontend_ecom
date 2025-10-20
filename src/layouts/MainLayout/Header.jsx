@@ -118,7 +118,7 @@ const Header = () => {
                         className="flex items-center gap-4 text-md hover:text-amber-600"
                       >
                         <Settings className="h-4 w-4" />
-                        <span>Admin</span>
+                        <span>Dashboard</span>
                       </Link>
                     ) : null}
                     <button

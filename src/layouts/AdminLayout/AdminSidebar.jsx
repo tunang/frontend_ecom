@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Home,
   Package,
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +59,13 @@ const AdminSidebar = ({ onLinkClick }) => {
       label: "Orders",
       color: "text-green-600",
       bgColor: "bg-green-50",
+    },
+    {
+      to: "/admin/coupons",
+      icon: Tag,
+      label: "Coupons",
+      color: "text-pink-600",
+      bgColor: "bg-pink-50",
     },
     {
       to: "/admin/users",

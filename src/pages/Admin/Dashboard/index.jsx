@@ -228,9 +228,9 @@ const DashboardPage = () => {
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {/* Recent Orders */}
-        <Card className="border-2 border-gray-100 gap-0">
-          <CardHeader className="border-b border-gray-100 bg-gray-50">
-            <CardTitle className="text-lg flex items-center gap-2">
+        <Card className="border-2 border-gray-100 gap-0 py-0">
+          <CardHeader className="  border-b border-gray-100 bg-gray-50">
+            <CardTitle className="h-full text-lg flex items-center gap-2">
               <Package className="w-5 h-5 text-green-600" />
               Recent orders
             </CardTitle>

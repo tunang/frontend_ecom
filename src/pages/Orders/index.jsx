@@ -201,8 +201,8 @@ const OrdersPage = () => {
         ) : (
           <>
             {/* Orders Accordion */}
-            <Card>
-              <CardContent className="p-6 ">
+            <Card className="py-0">
+              <CardContent className="py-0 ">
                 <Accordion
                   type="single"
                   collapsible
@@ -380,6 +380,7 @@ const OrdersPage = () => {
                                     ).toFixed(2)}
                                   </span>
                                 </div>
+                                
                                 <div className="border-t pt-2 flex justify-between">
                                   <span className="font-semibold text-gray-900">
                                       Total

@@ -23,6 +23,7 @@ import AuthorsPage from "../pages/Admin/Authors";
 import AdminOrdersPage from "../pages/Admin/Orders";
 import AdminUsersPage from "../pages/Admin/Users";
 import AdminSettingsPage from "../pages/Admin/Settings";
+import AdminCouponsPage from "../pages/Admin/Coupons";
 import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -177,6 +178,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute roles={["admin"]}>
             <AdminSettingsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "coupons",
+        element: (
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminCouponsPage />
           </ProtectedRoute>
         ),
       },
