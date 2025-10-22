@@ -578,16 +578,26 @@ const AdminOrdersPage = () => {
                                   )}
                                 </span>
                               </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">
-                                  Shipping fee:
-                                </span>
-                                <span className="font-medium">
-                                  {formatCurrency(
-                                    expandedOrders[order.id].shipping_cost
-                                  )}
-                                </span>
-                              </div>
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">
+                                    Shipping fee:
+                                  </span>
+                                  <span className="font-medium">
+                                    {formatCurrency(
+                                      expandedOrders[order.id].shipping_cost
+                                    )}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">
+                                    Discount:
+                                  </span>
+                                  <span className="font-medium text-red-600">
+                                    -{formatCurrency(
+                                      expandedOrders[order.id].discount_amount
+                                    )}
+                                  </span>
+                                </div>
                               <div className="border-t border-blue-200 pt-2 flex justify-between">
                                 <span className="font-bold text-gray-900">
                                   Total:

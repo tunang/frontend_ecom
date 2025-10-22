@@ -168,7 +168,7 @@ const CategoryPage = () => {
       </div>
 
       {/* Table */}
-      <Card>
+      <Card className="py-0">
         {/* <CardHeader className="border-b border-gray-200 bg-gray-50">
           <CardTitle className="text-lg flex items-center gap-2">
             <Tags className="w-5 h-5 text-purple-600" />

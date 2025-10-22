@@ -15,6 +15,8 @@ import {
   Loader2,
   Plus,
   Edit,
+  Tag,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import AddressService from "@/services/address.service";
@@ -28,7 +30,7 @@ const CheckoutPage = () => {
   const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
 
   // Cart store
-  const { items, selectedItems, getSelectedOrderItems, getSelectedTotal } = useCartStore();
+  const { items, selectedItems, getSelectedOrderItems, getSelectedTotal, appliedCoupon, removeAppliedCoupon } = useCartStore();
 
   // Addresses
   const [addresses, setAddresses] = useState([]);
@@ -76,7 +78,24 @@ const CheckoutPage = () => {
   const shippingFee = parseFloat(settings.shipping_cost);
   const vat = parseFloat(settings.tax_rate);
   const subtotal = getSelectedTotal();
-  const total = subtotal + shippingFee + (subtotal * vat);
+  const taxAmount = subtotal * vat;
+  const totalBeforeCoupon = subtotal + shippingFee + taxAmount;
+  
+  // Calculate coupon discount (applied to total after shipping and tax)
+  const calculateCouponDiscount = () => {
+    if (!appliedCoupon) return 0;
+    
+    if (appliedCoupon.percent_off) {
+      return (totalBeforeCoupon * appliedCoupon.percent_off) / 100;
+    } else if (appliedCoupon.amount_off) {
+      return Math.min(parseFloat(appliedCoupon.amount_off), totalBeforeCoupon);
+    }
+    
+    return 0;
+  };
+  
+  const couponDiscount = calculateCouponDiscount();
+  const total = totalBeforeCoupon - couponDiscount;
 
   // Check if cart is empty
   useEffect(() => {
@@ -158,6 +177,7 @@ const CheckoutPage = () => {
         payment_method: selectedPayment,
         note: orderNote || undefined,
         order_items: getSelectedOrderItems(),
+        ...(appliedCoupon && { coupon_code: appliedCoupon.code }),
       };
 
       console.log("Order data:", orderData);
@@ -165,6 +185,11 @@ const CheckoutPage = () => {
       const response = await OrderService.createOrder(orderData);
 
       console.log("Order response:", response);
+
+      // Clear applied coupon after successful order
+      if (appliedCoupon) {
+        removeAppliedCoupon();
+      }
 
       // If payment_url exists, redirect to Stripe payment
       if (response.payment_url) {
@@ -375,6 +400,35 @@ const CheckoutPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Applied Coupon */}
+                {appliedCoupon && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-green-600" />
+                        <div>
+                          <p className="font-mono font-semibold text-green-900 text-sm">
+                            {appliedCoupon.code}
+                          </p>
+                          <p className="text-xs text-green-700">
+                            {appliedCoupon.percent_off
+                              ? `Giảm ${appliedCoupon.percent_off}%`
+                              : `Giảm $${parseFloat(appliedCoupon.amount_off).toFixed(2)}`}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeAppliedCoupon}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 px-2"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Cart Items */}
                 <div className="space-y-3 max-h-64 overflow-y-auto">
                   {selectedCartItems.map((item) => {
@@ -421,9 +475,15 @@ const CheckoutPage = () => {
                     <span className="font-medium">${shippingFee.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">VAT</span>
-                    <span className="font-medium">${(subtotal * vat).toFixed(2)}</span>
+                    <span className="text-gray-600">VAT ({(vat * 100).toFixed(0)}%)</span>
+                    <span className="font-medium">${taxAmount.toFixed(2)}</span>
                   </div>
+                  {appliedCoupon && couponDiscount > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Discount ({appliedCoupon.code})</span>
+                      <span className="font-medium">-${couponDiscount.toFixed(2)}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-t pt-4">

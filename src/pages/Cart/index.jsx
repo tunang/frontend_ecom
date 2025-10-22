@@ -50,13 +50,15 @@ const Cart = () => {
     removeFromCart,
     clearCart,
     clearMessage,
+    appliedCoupon,
+    setAppliedCoupon,
+    removeAppliedCoupon,
   } = useCartStore();
   const navigate = useNavigate();
   const [updatingItems, setUpdatingItems] = useState(new Set());
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [openPopovers, setOpenPopovers] = useState({});
   const [couponCode, setCouponCode] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
   useEffect(() => {
@@ -83,6 +85,8 @@ const Cart = () => {
 
   const handleClearCart = async () => {
     await clearCart();
+    removeAppliedCoupon();
+    setCouponCode("");
     setShowClearDialog(false);
   };
 
@@ -115,7 +119,7 @@ const Cart = () => {
   };
 
   const handleRemoveCoupon = () => {
-    setAppliedCoupon(null);
+    removeAppliedCoupon();
     setCouponCode("");
     toast.success("Coupon removed");
   };
@@ -204,7 +208,7 @@ const Cart = () => {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Cart</h1>
-          <Card>
+          <Card  className="py-0">
             <CardContent className="flex flex-col items-center justify-center py-16">
               <ShoppingCart className="h-24 w-24 text-gray-300 mb-4" />
               <h2 className="text-2xl font-semibold text-gray-700 mb-2">
@@ -281,7 +285,7 @@ const Cart = () => {
               const isSelected = selectedItems.includes(book.id);
 
               return (
-                <Card key={book.id} className="overflow-hidden">
+                <Card key={book.id} className="overflow-hidden py-1">
                   <CardContent className="p-4">
                     <div className="flex gap-4">
                       {/* Checkbox */}

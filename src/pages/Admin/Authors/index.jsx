@@ -169,7 +169,7 @@ const AuthorsPage = () => {
       </div>
 
       {/* Table */}
-      <Card>
+      <Card className="py-0">
         <CardContent className="p-0">
           {loading ? (
             <div className="flex items-center justify-center py-20">

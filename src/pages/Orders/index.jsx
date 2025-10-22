@@ -282,7 +282,7 @@ const OrdersPage = () => {
                                         <p className="text-sm text-gray-600 mt-1">
                                           Quantity: {item.quantity}
                                         </p>
-                                        <p className="text-sm text-amber-600 font-semibold mt-1">
+                                        {/* <p className="text-sm text-amber-600 font-semibold mt-1">
                                           ${parseFloat(item.unit_price).toFixed(
                                             2
                                           )}{" "}
@@ -290,7 +290,7 @@ const OrdersPage = () => {
                                           {parseFloat(item.total_price).toFixed(
                                             2
                                           )}
-                                        </p>
+                                        </p> */}
                                       </div>
                                     </div>
                                   )
@@ -377,6 +377,18 @@ const OrdersPage = () => {
                                     $
                                     {parseFloat(
                                       orderDetails[order.id].shipping_cost
+                                    ).toFixed(2)}
+                                  </span>
+                                </div>
+
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">
+                                    Discount
+                                  </span>
+                                  <span className="font-medium text-red-600">
+                                    -$
+                                    {parseFloat(
+                                      orderDetails[order.id].discount_amount
                                     ).toFixed(2)}
                                   </span>
                                 </div>

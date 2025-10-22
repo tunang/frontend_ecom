@@ -10,6 +10,7 @@ export const useCartStore = create((set, get) => ({
   totalAmount: 0,
   selectedTotalItems: 0,
   selectedTotalAmount: 0,
+  appliedCoupon: null,
 
   getCart: async () => {
     const response = await cartService.getCart();
@@ -173,6 +174,15 @@ export const useCartStore = create((set, get) => ({
     set({ message: null });
   },
 
+  // Coupon methods
+  setAppliedCoupon: (coupon) => {
+    set({ appliedCoupon: coupon });
+  },
+
+  removeAppliedCoupon: () => {
+    set({ appliedCoupon: null });
+  },
+
   // Reset cart state về initial state (dùng khi logout)
   resetCart: () => {
     set({
@@ -184,6 +194,7 @@ export const useCartStore = create((set, get) => ({
       totalAmount: 0,
       selectedTotalItems: 0,
       selectedTotalAmount: 0,
+      appliedCoupon: null,
     });
   },
 }));

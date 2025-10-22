@@ -196,7 +196,7 @@ const BooksPage = () => {
               showMobileFilters ? "block" : "hidden"
             } md:block w-full md:w-64 flex-shrink-0`}
           >
-            <Card className="sticky top-4">
+            <Card className="sticky top-4 py-0">
               <CardContent className="p-4 space-y-6">
                 {/* Filter Header */}
                 <div className="flex items-center justify-between">

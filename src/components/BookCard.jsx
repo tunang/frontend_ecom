@@ -50,7 +50,7 @@ const BookCard = ({book}) => {
   return (
     <Card
       key={book.id}
-      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group"
+      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group py-0"
     >
       <CardContent className="p-0">
         <Link to={`/books/${book.slug || book.id}`}>

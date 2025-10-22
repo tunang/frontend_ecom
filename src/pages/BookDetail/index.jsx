@@ -129,7 +129,7 @@ const BookDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Section */}
           <div className="space-y-4">
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden py-0">
               <CardContent className="p-0">
                 <div className="relative aspect-[3/4] bg-gray-100">
                   <img
@@ -219,7 +219,7 @@ const BookDetail = () => {
             )}
 
             {/* Price */}
-            <Card>
+            <Card className="py-0">
               <CardContent className="p-6">
                 <div className="flex items-baseline gap-3">
                   <span className="text-4xl font-bold text-amber-600">
@@ -307,7 +307,7 @@ const BookDetail = () => {
 
             {/* Description */}
             {book.description && (
-              <Card>
+              <Card className="py-0">
                 <CardContent className="p-6">
                   <h2 className="text-xl font-bold text-gray-900 mb-3">
                     Product description
@@ -320,7 +320,7 @@ const BookDetail = () => {
             )}
 
             {/* Additional Info */}
-            <Card>
+            <Card className="py-0">
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
                   Detailed information
