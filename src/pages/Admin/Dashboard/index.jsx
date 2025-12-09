@@ -9,11 +9,13 @@ import {
   TrendingUp,
   Package,
   Loader2,
+  PieChart as PieChartIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import StatService from "@/services/stat.service";
 import OrderService from "@/services/order.service";
 import { subscribeAdminOrdersChannel } from "../../../lib/cable/admin/order/cable";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -114,6 +116,15 @@ const DashboardPage = () => {
       navigate(navigateTo);
     }
   };
+
+  // Mock data cho pie chart
+  const orderStatusData = [
+    { name: "Pending", value: 15, color: "#eab308" },
+    { name: "Processing", value: 8, color: "#3b82f6" },
+    { name: "Confirmed", value: 22, color: "#a855f7" },
+    { name: "Delivered", value: 45, color: "#10b981" },
+    { name: "Cancelled", value: 10, color: "#ef4444" },
+  ];
 
   const statsCards = [
     {
@@ -299,21 +310,52 @@ const DashboardPage = () => {
           </CardContent>
         </Card>
 
-        {/* Popular Books */}
-        {/* <Card className="border-2 border-gray-100">
+        {/* Order Status Distribution */}
+        <Card className="border-2 border-gray-100">
           <CardHeader className="border-b border-gray-100 bg-gray-50">
             <CardTitle className="text-lg flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-amber-600" />
-              Featured books
+              <PieChartIcon className="w-5 h-5 text-blue-600" />
+              Phân bổ trạng thái đơn hàng
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="text-center py-8 text-gray-500">
-              <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-              <p>Coming soon</p>
+            <div className="w-full h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={orderStatusData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {orderStatusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {orderStatusData.map((item, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-sm text-gray-600">
+                    {item.name}: <span className="font-semibold">{item.value}</span>
+                  </span>
+                </div>
+              ))}
             </div>
           </CardContent>
-        </Card> */}
+        </Card>
       </div>
     </div>
   );
